@@ -7,7 +7,18 @@
 <!-- * * * * * * * to get started with your project! * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<app-editor></app-editor>
+
+<h1>Demo Editor TipTap</h1>
+
+<app-editor
+  [content]="editorValue"
+  [readonly]="false"
+  (contentChange)="onEditorChange($event)">
+</app-editor>
+
+<h2>Preview (somente leitura)</h2>
+<div [innerHTML]="editorValue"></div>
+
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
