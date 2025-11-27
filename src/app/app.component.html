@@ -8,7 +8,7 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 
-<h1>Demo Editor TipTap</h1>
+<h1>Demo Editor TipTap (Shared)</h1>
 
 <app-editor
   [content]="editorValue"
@@ -16,8 +16,9 @@
   (contentChange)="onEditorChange($event)">
 </app-editor>
 
-<h2>Preview (somente leitura)</h2>
+<h2>Preview</h2>
 <div [innerHTML]="editorValue"></div>
+
 
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

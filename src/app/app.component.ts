@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EditorComponent } from './editor/editor.component';
+import { EditorComponent } from './shared/editor';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +13,5 @@ export class AppComponent {
 
   onEditorChange(html: string) {
     this.editorValue = html;
-    console.log('Novo conteúdo:', html);
   }
 }
