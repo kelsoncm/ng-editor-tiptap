@@ -1,32 +1,26 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
-<h1>Demo Editor TipTap (Shared)</h1>
+<h1>Editor TipTap com toolbarPreset</h1>
 
 <app-editor
   [content]="editorValue"
   [readonly]="false"
-  (contentChange)="onEditorChange($event)">
+  [placeholder]="'Digite o texto do documento…'"
+  [minHeight]="'250px'"
+  [toolbarPreset]="'full'"
+  [enableHeading]="true"
+  [enableBold]="true"
+  [enableItalic]="true"
+  [enableCode]="true"
+  [outputFormat]="'html'"
+  (contentChange)="onEditorChange($event)"
+  (jsonChange)="onJsonChange($event)"
+  (focus)="onFocus()"
+  (blur)="onBlur()">
 </app-editor>
 
-<h2>Preview</h2>
+<p>Focado: {{ editorFocused }}</p>
+
+<h2>Preview HTML</h2>
 <div [innerHTML]="editorValue"></div>
 
-
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
+<h2>Preview JSON</h2>
+<pre>{{ editorJson }}</pre>

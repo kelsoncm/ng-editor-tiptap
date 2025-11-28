@@ -1,1 +1,27 @@
-<div #editorElement></div>
+<!-- Toolbar -->
+<div class="toolbar" *ngIf="!readonly">
+  <!-- minimal: apenas bold/italic -->
+  <ng-container *ngIf="toolbarPreset === 'minimal'">
+    <button type="button" (click)="toggleBold()">B</button>
+    <button type="button" (click)="toggleItalic()"><i>I</i></button>
+  </ng-container>
+
+  <!-- full: heading + bold/italic/code -->
+  <ng-container *ngIf="toolbarPreset === 'full'">
+    <button type="button" (click)="setParagraph()">P</button>
+    <button type="button" (click)="setHeading(1)">H1</button>
+    <button type="button" (click)="setHeading(2)">H2</button>
+    <button type="button" (click)="setHeading(3)">H3</button>
+
+    <button type="button" (click)="toggleBold()">B</button>
+    <button type="button" (click)="toggleItalic()"><i>I</i></button>
+    <button type="button" (click)="toggleCode()">[code]</button>
+  </ng-container>
+</div>
+
+<!-- Área do editor -->
+<div
+  #editorElement
+  class="editor-surface"
+  [style.min-height]="minHeight">
+</div>

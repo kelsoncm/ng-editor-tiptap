@@ -9,9 +9,24 @@ import { EditorComponent } from './shared/editor';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  editorValue = '<p>Conteúdo inicial vindo do AppComponent.</p>';
+  editorValue = '<p>Conteúdo inicial com <strong>bold</strong>.</p>';
+  editorJson = '';
+  editorFocused = false;
 
   onEditorChange(html: string) {
     this.editorValue = html;
+  }
+
+  onJsonChange(json: unknown) {
+    this.editorJson = JSON.stringify(json, null, 2);
+  }
+
+  onFocus() {
+    this.editorFocused = true;
+  }
+
+  onBlur() {
+    this.editorFocused = false;
+    // aqui daria para marcar formControl como touched
   }
 }
