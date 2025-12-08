@@ -1,25 +1,148 @@
-<!-- Toolbar -->
-<div class="toolbar" *ngIf="!readonly">
-  <!-- minimal: apenas bold/italic -->
+<div class="toolbar" *ngIf="!isDisabled">
+  <!-- undo / redo -->
+  <div class="toolbar-group">
+    <button type="button" (click)="undo()" title="Desfazer"><i class="fas fa-undo"></i></button>
+    <button type="button" (click)="redo()" title="Refazer"><i class="fas fa-redo"></i></button>
+  </div>
+
   <ng-container *ngIf="toolbarPreset === 'minimal'">
-    <button type="button" (click)="toggleBold()">B</button>
-    <button type="button" (click)="toggleItalic()"><i>I</i></button>
+    <div class="toolbar-group">
+      <button type="button" (click)="toggleBold()" title="Negrito"><i class="fas fa-bold"></i></button>
+      <button type="button" (click)="toggleItalic()" title="Itálico"><i class="fas fa-italic"></i></button>
+      <button type="button" (click)="toggleUnderline()" title="Sublinhado"><i class="fas fa-underline"></i></button>
+    </div>
   </ng-container>
 
-  <!-- full: heading + bold/italic/code -->
   <ng-container *ngIf="toolbarPreset === 'full'">
-    <button type="button" (click)="setParagraph()">P</button>
-    <button type="button" (click)="setHeading(1)">H1</button>
-    <button type="button" (click)="setHeading(2)">H2</button>
-    <button type="button" (click)="setHeading(3)">H3</button>
+    <!-- blocos -->
+    <div class="toolbar-group">
+      <!-- blocos dropdown -->
+      <div class="toolbar-dropdown">
+        <button type="button" (click)="toggleBlocksDropdown()" class="dropdown-trigger" title="Tipos de bloco">
+          <i [ngClass]="currentBlockType"></i> <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu" *ngIf="showBlocksDropdown" (click)="$event.stopPropagation()">
+          <button type="button" (click)="selectBlockType('paragraph')" class="dropdown-item">
+            <i class="fas fa-paragraph"></i> Parágrafo
+          </button>
+          <button type="button" (click)="selectBlockType('h1')" class="dropdown-item">
+            <i class="fas fa-heading"></i> Título 1
+          </button>
+          <button type="button" (click)="selectBlockType('h2')" class="dropdown-item">
+            <i class="fas fa-heading"></i> Título 2
+          </button>
+          <button type="button" (click)="selectBlockType('h3')" class="dropdown-item">
+            <i class="fas fa-heading"></i> Título 3
+          </button>
+          <button type="button" (click)="selectBlockType('h4')" class="dropdown-item">
+            <i class="fas fa-heading"></i> Título 4
+          </button>
+          <button type="button" (click)="selectBlockType('h5')" class="dropdown-item">
+            <i class="fas fa-heading"></i> Título 5
+          </button>
+          <button type="button" (click)="selectBlockType('h6')" class="dropdown-item">
+            <i class="fas fa-heading"></i> Título 6
+          </button>
+          <hr class="dropdown-divider" />
+          <button type="button" (click)="selectBlockType('quote')" class="dropdown-item">
+            <i class="fas fa-quote-left"></i> Citação
+          </button>
+          <button type="button" (click)="selectBlockType('code-block')" class="dropdown-item">
+            <i class="fas fa-code"></i> Bloco de Código
+          </button>
+        </div>
+      </div>
 
-    <button type="button" (click)="toggleBold()">B</button>
-    <button type="button" (click)="toggleItalic()"><i>I</i></button>
-    <button type="button" (click)="toggleCode()">[code]</button>
+      <!-- listas -->
+      <button type="button" (click)="toggleBulletList()" title="Lista com marcadores"><i class="fas fa-list-ul"></i></button>
+      <button type="button" (click)="toggleOrderedList()" title="Lista numerada"><i class="fas fa-list-ol"></i></button>
+    </div>
+
+    <div class="toolbar-group">
+      <!-- inline marks -->
+      <button type="button" (click)="toggleBold()" title="Negrito"><i class="fas fa-bold"></i></button>
+      <button type="button" (click)="toggleItalic()" title="Itálico"><i class="fas fa-italic"></i></button>
+      <button type="button" (click)="toggleCode()" title="Código"><i class="fas fa-code"></i></button>
+      <button type="button" (click)="toggleUnderline()" title="Sublinhado"><i class="fas fa-underline"></i></button>
+    </div>
+
+    <div class="toolbar-group">
+      <!-- link -->
+      <button type="button" (click)="setLink()" title="Inserir link"><i class="fas fa-link"></i></button>
+      <button type="button" (click)="unsetLink()" title="Remover link"><i class="fas fa-unlink"></i></button>
+    </div>
+
+    <div class="toolbar-group">
+      <!-- mention dialog -->
+      <button type="button" (click)="openMentionDialog()" *ngIf="enableMention" title="Inserir Menção"><i class="fas fa-at"></i></button>
+    </div>
   </ng-container>
+
 </div>
 
-<!-- Área do editor -->
+<!-- Mention Dialog -->
+<div class="mention-dialog-overlay" *ngIf="showMentionDialog" (click)="closeMentionDialog()">
+  <div class="mention-dialog" (click)="$event.stopPropagation()">
+    <div class="mention-dialog-header">
+      <h3>Escolher Menção</h3>
+      <button class="close-btn" (click)="closeMentionDialog()">×</button>
+    </div>
+    <div class="mention-dialog-content">
+      <button
+        *ngFor="let item of mentionItems"
+        class="mention-dialog-item"
+        (click)="insertMention(item)">
+        {{ item.label }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Balloon Context Menu -->
+<div 
+  class="balloon-menu" 
+  *ngIf="showBalloonMenu"
+  [style.top]="balloonMenuPosition.top"
+  [style.left]="balloonMenuPosition.left"
+  (click)="$event.stopPropagation()">
+  <button 
+    type="button" 
+    class="balloon-button" 
+    (click)="toggleBold(); closeBalloonMenu()"
+    title="Negrito">
+    <i class="fas fa-bold"></i>
+  </button>
+  <button 
+    type="button" 
+    class="balloon-button" 
+    (click)="toggleItalic(); closeBalloonMenu()"
+    title="Itálico">
+    <i class="fas fa-italic"></i>
+  </button>
+  <button 
+    type="button" 
+    class="balloon-button" 
+    (click)="toggleUnderline(); closeBalloonMenu()"
+    title="Sublinhado">
+    <i class="fas fa-underline"></i>
+  </button>
+  <button 
+    type="button" 
+    class="balloon-button" 
+    (click)="toggleCode(); closeBalloonMenu()"
+    title="Código">
+    <i class="fas fa-code"></i>
+  </button>
+  <div class="balloon-divider"></div>
+  <button 
+    type="button" 
+    class="balloon-button" 
+    (click)="setLink(); closeBalloonMenu()"
+    title="Inserir link">
+    <i class="fas fa-link"></i>
+  </button>
+</div>
+
 <div
   #editorElement
   class="editor-surface"

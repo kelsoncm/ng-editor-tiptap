@@ -1,26 +1,61 @@
-<h1>Editor TipTap com toolbarPreset</h1>
+<div class="tabs-container">
+  <div class="tabs-header">
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'form'"
+      (click)="selectTab('form')">
+      Formulário
+    </button>
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'html'"
+      (click)="selectTab('html')">
+      Preview HTML
+    </button>
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'json'"
+      (click)="selectTab('json')">
+      Preview JSON
+    </button>
+  </div>
 
-<app-editor
-  [content]="editorValue"
-  [readonly]="false"
-  [placeholder]="'Digite o texto do documento…'"
-  [minHeight]="'250px'"
-  [toolbarPreset]="'full'"
-  [enableHeading]="true"
-  [enableBold]="true"
-  [enableItalic]="true"
-  [enableCode]="true"
-  [outputFormat]="'html'"
-  (contentChange)="onEditorChange($event)"
-  (jsonChange)="onJsonChange($event)"
-  (focus)="onFocus()"
-  (blur)="onBlur()">
-</app-editor>
+  <div class="tabs-content">
+    <!-- Aba Formulário -->
+    <div class="tab-pane" *ngIf="activeTab === 'form'">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <h2>Editor com Reactive Forms</h2>
 
-<p>Focado: {{ editorFocused }}</p>
+        <app-editor
+          formControlName="body"
+          [toolbarPreset]="'full'"
+          [minHeight]="'250px'"
+          [readonly]="false"
+          [placeholder]="'Digite o texto do documento…'"
+          [enableHeading]="true"
+          [enableBold]="true"
+          [enableItalic]="true"
+          [enableCode]="true"
+          (jsonChange)="onJsonChange($event)"
+          (focus)="onFocus()"
+          (blur)="onBlur()">
+        </app-editor>
 
-<h2>Preview HTML</h2>
-<div [innerHTML]="editorValue"></div>
+        <button type="submit">Enviar</button>
 
-<h2>Preview JSON</h2>
-<pre>{{ editorJson }}</pre>
+      </form>
+    </div>
+
+    <!-- Aba Preview HTML -->
+    <div class="tab-pane" *ngIf="activeTab === 'html'">
+        <h3>Preview (Reactive Forms)</h3>
+        <div class="preview-box" [innerHTML]="form.get('body')?.value"></div>
+    </div>
+
+    <!-- Aba Preview JSON -->
+    <div class="tab-pane" *ngIf="activeTab === 'json'">
+      <h2>Preview JSON</h2>
+      <pre class="json-preview">{{ editorJson | json }}</pre>
+    </div>
+  </div>
+</div>

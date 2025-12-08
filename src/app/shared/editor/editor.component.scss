@@ -4,20 +4,183 @@
 
 .toolbar {
   display: flex;
-  gap: 4px;
-  margin-bottom: 4px;
+  gap: 0;
+  margin-bottom: 12px;
+  align-items: center;
+  padding: 8px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
 
   button {
-    border: 1px solid #ccc;
-    background-color: #f5f5f5;
-    padding: 4px 8px;
-    border-radius: 3px;
+    border: 1px solid #d0d0d0;
+    background-color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1f1f1f;
+    transition: all 0.2s ease;
+    margin-right: -1px;
 
     &:hover {
-      background-color: #e8e8e8;
+      background-color: #f0f0f0;
+      border-color: #b8b8b8;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
+
+    &:active {
+      background-color: #e8e8e8;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #0050a4;
+      outline-offset: 2px;
+    }
+
+    &[title="Inserir Menção"] {
+      background-color: #0050a4;
+      color: white;
+      border-color: #003d7a;
+      font-weight: 600;
+      font-size: 0.95rem;
+
+      &:hover {
+        background-color: #003d7a;
+        border-color: #002a57;
+        box-shadow: 0 2px 4px rgba(0, 80, 164, 0.2);
+      }
+
+      &:active {
+        background-color: #002a57;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      &:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+
+.toolbar-spacer {
+  flex: 1;
+  height: 1px;
+}
+
+.toolbar-group {
+  display: inline-flex;
+  gap: 0;
+  margin-right: 1em;
+
+  button {
+    border-radius: 0;
+    margin-right: -1px;
+
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+      margin-right: 0;
+    }
+  }
+
+  .toolbar-dropdown {
+    display: inline-block;
+    margin-right: -1px;
+
+    &:first-child .dropdown-trigger {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:last-child .dropdown-trigger {
+      border-radius: 0 4px 4px 0;
+      margin-right: 0;
+    }
+
+    .dropdown-trigger {
+      border-radius: 0;
+    }
+  }
+}
+
+.toolbar-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-right: -1px;
+
+  .dropdown-trigger {
+    padding: 8px 12px;
+    border: 1px solid #d0d0d0;
+    background-color: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1f1f1f;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #f0f0f0;
+      border-color: #b8b8b8;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #0050a4;
+      outline-offset: 2px;
+    }
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    padding: 4px 0;
+    margin-top: 6px;
+    z-index: 100;
+  }
+
+  .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    background: white;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: #1f1f1f;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
+    &:active {
+      background-color: #e0e0e0;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #0050a4;
+      outline-offset: -2px;
+    }
+  }
+
+  .dropdown-divider {
+    margin: 6px 0;
+    border: none;
+    border-top: 1px solid #e0e0e0;
   }
 }
 
@@ -26,4 +189,254 @@
   padding: 8px;
   border-radius: 4px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+
+  // Remove outline do ProseMirror
+  ::ng-deep .ProseMirror:focus {
+    outline: none;
+  }
+
+  // Desabilitar navegação de links
+  ::ng-deep a {
+    pointer-events: none;
+    cursor: text;
+  }
+
+  // Mention styles dentro do editor
+  ::ng-deep .mention {
+    background-color: #9b59b6;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 0 8px;
+    font-weight: 600;
+    font-size: 0.9em;
+    display: inline-block;
+    margin: 0 2px;
+    border: 1px solid #8e44ad;
+    box-shadow: 0 1px 2px rgba(155, 89, 182, 0.2);
+  }
+}
+
+// Mention styles global (caso apareça fora do editor)
+:host ::ng-deep .mention {
+  background-color: #9b59b6;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-weight: 600;
+  font-size: 0.9em;
+  display: inline-block;
+  margin: 0 2px;
+  border: 1px solid #8e44ad;
+  box-shadow: 0 1px 2px rgba(155, 89, 182, 0.2);
+}
+
+.mention-dropdown {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 4px 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.mention-item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover,
+  &.selected {
+    background-color: #f5f5f5;
+  }
+
+  &:active {
+    background-color: #e8e8e8;
+  }
+}
+
+// Mention Dialog Styles
+.mention-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.mention-dialog {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.mention-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+
+  h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: #333;
+  }
+}
+
+.mention-dialog-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.mention-dialog-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &:active {
+    background-color: #efefef;
+  }
+}
+
+// Balloon Context Menu Styles
+.balloon-menu {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 6px;
+  background-color: #ffffff;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  transform: translate(-50%, -100%);
+  margin-top: -8px;
+  animation: fadeIn 0.2s ease-out;
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #ffffff;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid #d0d0d0;
+  }
+}
+
+.balloon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: #1f1f1f;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #f0f0f0;
+    color: #0050a4;
+  }
+
+  &:active {
+    background-color: #e8e8e8;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0050a4;
+    outline-offset: 2px;
+  }
+}
+
+.balloon-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e0e0e0;
+  margin: 0 4px;
 }

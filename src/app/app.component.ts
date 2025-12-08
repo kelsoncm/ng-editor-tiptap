@@ -1,32 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { EditorComponent } from './shared/editor';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [EditorComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, EditorComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  editorValue = '<p>Conteúdo inicial com <strong>bold</strong>.</p>';
-  editorJson = '';
-  editorFocused = false;
+  form: FormGroup;
+  editorValue: string = '';
+  editorJson: any = null;
+  editorFocused: boolean = false;
+  activeTab: 'form' | 'html' | 'json' = 'form';
 
-  onEditorChange(html: string) {
+  constructor(private fb: FormBuilder) {
+    this.form = this.fb.group({
+      body: ['<p>Texto inicial vindo do form.</p>'],
+    });
+  }
+
+  submit() {
+    console.log('Form value:', this.form.value);
+  }
+
+  onEditorChange(html: string): void {
     this.editorValue = html;
+    console.log('Editor HTML changed:', html);
   }
 
-  onJsonChange(json: unknown) {
-    this.editorJson = JSON.stringify(json, null, 2);
+  onJsonChange(json: any): void {
+    this.editorJson = json;
+    console.log('Editor JSON changed:', json);
   }
 
-  onFocus() {
+  onFocus(): void {
     this.editorFocused = true;
+    console.log('Editor focused');
   }
 
-  onBlur() {
+  onBlur(): void {
     this.editorFocused = false;
-    // aqui daria para marcar formControl como touched
+    console.log('Editor blurred');
+  }
+
+  selectTab(tab: 'form' | 'html' | 'json'): void {
+    this.activeTab = tab;
   }
 }
