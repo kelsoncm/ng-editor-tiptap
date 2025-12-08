@@ -36,6 +36,9 @@
       "strike": "Strikethrough",
       "underline": "Underline",
       "code": "Code",
+      "subscript": "Subscript",
+      "superscript": "Superscript",
+      "lineHeight": "Line height",
       "blockTypes": "Block types",
       "bulletList": "Bullet list",
       "orderedList": "Ordered list",
@@ -67,7 +70,13 @@
       "strike": "Strikethrough",
       "underline": "Underline",
       "code": "Code",
+      "subscript": "Subscript",
+      "superscript": "Superscript",
       "link": "Insert link"
+    },
+    "lineHeight": {
+      "simple": "Simple",
+      "double": "Double"
     },
     "messages": {
       "noResults": "No results"

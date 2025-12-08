@@ -36,6 +36,9 @@
       "strike": "Tachado",
       "underline": "Subrayado",
       "code": "Código",
+      "subscript": "Subíndice",
+      "superscript": "Superíndice",
+      "lineHeight": "Altura de línea",
       "blockTypes": "Tipos de bloque",
       "bulletList": "Lista de viñetas",
       "orderedList": "Lista numerada",
@@ -67,7 +70,13 @@
       "strike": "Tachado",
       "underline": "Subrayado",
       "code": "Código",
+      "subscript": "Subíndice",
+      "superscript": "Superíndice",
       "link": "Insertar enlace"
+    },
+    "lineHeight": {
+      "simple": "Simple",
+      "double": "Doble"
     },
     "messages": {
       "noResults": "Sin resultados"

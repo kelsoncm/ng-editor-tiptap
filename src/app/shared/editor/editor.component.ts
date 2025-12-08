@@ -17,11 +17,14 @@ import {
 import { Editor, JSONContent, AnyExtension } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Mention from '@tiptap/extension-mention';
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
 import { PluginKey } from '@tiptap/pm/state';
 import tippy, { Instance as TippyInstance } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { I18nService } from '../services/i18n.service';
+import { LineHeight } from './extensions/line-height';
 
 @Component({
   selector: 'app-editor',
@@ -54,6 +57,9 @@ export class EditorComponent
   @Input() enableStrike = true;
   @Input() enableCode = true;
   @Input() enableMention = true;
+  @Input() enableSubscript = true;
+  @Input() enableSuperscript = true;
+  @Input() enableLineHeight = true;
   @Input() mentionItems: { id: string; label: string }[] = [
     { id: 'inicioEdital', label: 'inicioEdital' },
     { id: 'fimEdital', label: 'fimEdital' },
@@ -67,9 +73,11 @@ export class EditorComponent
 
   showMentionDialog = false;
   showBlocksDropdown = false;
+  showLineHeightDropdown = false;
   showBalloonMenu = false;
   balloonMenuPosition = { top: '0px', left: '0px' };
   currentBlockType: string = 'fas fa-paragraph';
+  currentLineHeight: string = 'normal';
   private editor!: Editor;
 
   // ControlValueAccessor
@@ -96,6 +104,24 @@ export class EditorComponent
         code: this.enableCode ? {} : false,
       }),
     ];
+
+    // Add Subscript extension
+    if (this.enableSubscript) {
+      extensions.push(Subscript);
+    }
+
+    // Add Superscript extension
+    if (this.enableSuperscript) {
+      extensions.push(Superscript);
+    }
+
+    // Add Line Height extension
+    if (this.enableLineHeight) {
+      extensions.push(LineHeight.configure({
+        types: ['paragraph', 'heading'],
+        defaultLineHeight: 'normal',
+      }));
+    }
 
     if (this.enableMention) {
       const self = this;
@@ -264,6 +290,7 @@ export class EditorComponent
       
       if (!target.closest('.toolbar-dropdown')) {
         this.showBlocksDropdown = false;
+        this.showLineHeightDropdown = false;
       }
     });
   }
@@ -349,6 +376,43 @@ export class EditorComponent
 
   toggleStrike(): void {
     this.editor?.chain().focus().toggleStrike().run();
+  }
+
+  toggleSubscript(): void {
+    this.editor?.chain().focus().toggleSubscript().run();
+  }
+
+  toggleSuperscript(): void {
+    this.editor?.chain().focus().toggleSuperscript().run();
+  }
+
+  setLineHeight(lineHeight: string): void {
+    this.editor?.chain().focus().setLineHeight(lineHeight).run();
+    this.currentLineHeight = lineHeight;
+    this.closeLineHeightDropdown();
+  }
+
+  toggleLineHeightDropdown(): void {
+    this.showLineHeightDropdown = !this.showLineHeightDropdown;
+  }
+
+  closeLineHeightDropdown(): void {
+    this.showLineHeightDropdown = false;
+  }
+
+  getLineHeightLabel(): string {
+    switch (this.currentLineHeight) {
+      case 'normal':
+        return this.translateSync('editor.lineHeight.simple');
+      case '1.15':
+        return '1.15';
+      case '1.5':
+        return '1.5';
+      case '2':
+        return this.translateSync('editor.lineHeight.double');
+      default:
+        return this.translateSync('editor.lineHeight.simple');
+    }
   }
 
   // Link simples (abre prompt por enquanto)
