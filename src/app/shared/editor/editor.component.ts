@@ -51,6 +51,7 @@ export class EditorComponent
   @Input() enableHeading = true;
   @Input() enableBold = true;
   @Input() enableItalic = true;
+  @Input() enableStrike = true;
   @Input() enableCode = true;
   @Input() enableMention = true;
   @Input() mentionItems: { id: string; label: string }[] = [
@@ -91,6 +92,7 @@ export class EditorComponent
           : false,
         bold: this.enableBold ? {} : false,
         italic: this.enableItalic ? {} : false,
+        strike: this.enableStrike ? {} : false,
         code: this.enableCode ? {} : false,
       }),
     ];
@@ -343,6 +345,10 @@ export class EditorComponent
 
   toggleCode(): void {
     this.editor?.chain().focus().toggleCode().run();
+  }
+
+  toggleStrike(): void {
+    this.editor?.chain().focus().toggleStrike().run();
   }
 
   // Link simples (abre prompt por enquanto)

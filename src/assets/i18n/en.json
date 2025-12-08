@@ -33,6 +33,7 @@
       "redo": "Redo",
       "bold": "Bold",
       "italic": "Italic",
+      "strike": "Strikethrough",
       "underline": "Underline",
       "code": "Code",
       "blockTypes": "Block types",
@@ -63,6 +64,7 @@
     "balloonMenu": {
       "bold": "Bold",
       "italic": "Italic",
+      "strike": "Strikethrough",
       "underline": "Underline",
       "code": "Code",
       "link": "Insert link"

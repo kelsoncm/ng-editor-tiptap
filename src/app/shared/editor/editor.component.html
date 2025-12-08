@@ -10,6 +10,7 @@
       <button type="button" (click)="toggleBold()" [title]="'editor.toolbar.bold' | translate"><i class="fas fa-bold"></i></button>
       <button type="button" (click)="toggleItalic()" [title]="'editor.toolbar.italic' | translate"><i class="fas fa-italic"></i></button>
       <button type="button" (click)="toggleUnderline()" [title]="'editor.toolbar.underline' | translate"><i class="fas fa-underline"></i></button>
+      <button type="button" (click)="toggleStrike()" [title]="'editor.toolbar.strike' | translate"><i class="fas fa-strikethrough"></i></button>
     </div>
   </ng-container>
 
@@ -62,8 +63,9 @@
       <!-- inline marks -->
       <button type="button" (click)="toggleBold()" [title]="'editor.toolbar.bold' | translate"><i class="fas fa-bold"></i></button>
       <button type="button" (click)="toggleItalic()" [title]="'editor.toolbar.italic' | translate"><i class="fas fa-italic"></i></button>
-      <button type="button" (click)="toggleCode()" [title]="'editor.toolbar.code' | translate"><i class="fas fa-code"></i></button>
       <button type="button" (click)="toggleUnderline()" [title]="'editor.toolbar.underline' | translate"><i class="fas fa-underline"></i></button>
+      <button type="button" (click)="toggleStrike()" [title]="'editor.toolbar.strike' | translate"><i class="fas fa-strikethrough"></i></button>
+      <button type="button" (click)="toggleCode()" [title]="'editor.toolbar.code' | translate"><i class="fas fa-code"></i></button>
     </div>
 
     <div class="toolbar-group">
@@ -118,6 +120,13 @@
     (click)="toggleItalic(); closeBalloonMenu()"
     [title]="'editor.balloonMenu.italic' | translate">
     <i class="fas fa-italic"></i>
+  </button>
+  <button 
+    type="button" 
+    class="balloon-button" 
+    (click)="toggleStrike(); closeBalloonMenu()"
+    [title]="'editor.balloonMenu.strike' | translate">
+    <i class="fas fa-strikethrough"></i>
   </button>
   <button 
     type="button" 

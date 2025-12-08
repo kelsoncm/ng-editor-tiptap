@@ -33,6 +33,7 @@
       "redo": "Rehacer",
       "bold": "Negrita",
       "italic": "Cursiva",
+      "strike": "Tachado",
       "underline": "Subrayado",
       "code": "Código",
       "blockTypes": "Tipos de bloque",
@@ -63,6 +64,7 @@
     "balloonMenu": {
       "bold": "Negrita",
       "italic": "Cursiva",
+      "strike": "Tachado",
       "underline": "Subrayado",
       "code": "Código",
       "link": "Insertar enlace"
