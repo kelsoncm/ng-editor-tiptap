@@ -1,0 +1,81 @@
+{
+  "common": {
+    "submit": "Enviar",
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "yes": "Sí",
+    "no": "No",
+    "language": "Idioma"
+  },
+  "language": {
+    "en": "English",
+    "pt_br": "Português (Brasil)",
+    "es": "Español"
+  },
+  "app": {
+    "title": "Editor Tiptap",
+    "tabs": {
+      "form": "Formulario",
+      "htmlPreview": "Vista previa HTML",
+      "jsonPreview": "Vista previa JSON"
+    },
+    "editor": {
+      "heading": "Editor con Formularios Reactivos",
+      "placeholder": "Ingrese el texto del documento…"
+    }
+  },
+  "editor": {
+    "toolbar": {
+      "undo": "Deshacer",
+      "redo": "Rehacer",
+      "bold": "Negrita",
+      "italic": "Cursiva",
+      "underline": "Subrayado",
+      "code": "Código",
+      "blockTypes": "Tipos de bloque",
+      "bulletList": "Lista de viñetas",
+      "orderedList": "Lista numerada",
+      "link": "Insertar enlace",
+      "unlink": "Eliminar enlace",
+      "mention": "Insertar mención",
+      "quote": "Cita",
+      "codeBlock": "Bloque de código"
+    },
+    "blocks": {
+      "paragraph": "Párrafo",
+      "heading1": "Encabezado 1",
+      "heading2": "Encabezado 2",
+      "heading3": "Encabezado 3",
+      "heading4": "Encabezado 4",
+      "heading5": "Encabezado 5",
+      "heading6": "Encabezado 6",
+      "quote": "Cita",
+      "codeBlock": "Bloque de código"
+    },
+    "dialogs": {
+      "mentionTitle": "Elegir mención",
+      "linkPrompt": "Ingrese la URL del enlace",
+      "linkDefault": "https://"
+    },
+    "balloonMenu": {
+      "bold": "Negrita",
+      "italic": "Cursiva",
+      "underline": "Subrayado",
+      "code": "Código",
+      "link": "Insertar enlace"
+    },
+    "messages": {
+      "noResults": "Sin resultados"
+    },
+    "placeholders": {
+      "default": "Escriba aquí…"
+    }
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "invalidUrl": "URL inválida"
+  }
+}

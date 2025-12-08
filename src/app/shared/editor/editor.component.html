@@ -1,15 +1,15 @@
 <div class="toolbar" *ngIf="!isDisabled">
   <!-- undo / redo -->
   <div class="toolbar-group">
-    <button type="button" (click)="undo()" title="Desfazer"><i class="fas fa-undo"></i></button>
-    <button type="button" (click)="redo()" title="Refazer"><i class="fas fa-redo"></i></button>
+    <button type="button" (click)="undo()" [title]="'editor.toolbar.undo' | translate"><i class="fas fa-undo"></i></button>
+    <button type="button" (click)="redo()" [title]="'editor.toolbar.redo' | translate"><i class="fas fa-redo"></i></button>
   </div>
 
   <ng-container *ngIf="toolbarPreset === 'minimal'">
     <div class="toolbar-group">
-      <button type="button" (click)="toggleBold()" title="Negrito"><i class="fas fa-bold"></i></button>
-      <button type="button" (click)="toggleItalic()" title="Itálico"><i class="fas fa-italic"></i></button>
-      <button type="button" (click)="toggleUnderline()" title="Sublinhado"><i class="fas fa-underline"></i></button>
+      <button type="button" (click)="toggleBold()" [title]="'editor.toolbar.bold' | translate"><i class="fas fa-bold"></i></button>
+      <button type="button" (click)="toggleItalic()" [title]="'editor.toolbar.italic' | translate"><i class="fas fa-italic"></i></button>
+      <button type="button" (click)="toggleUnderline()" [title]="'editor.toolbar.underline' | translate"><i class="fas fa-underline"></i></button>
     </div>
   </ng-container>
 
@@ -18,63 +18,63 @@
     <div class="toolbar-group">
       <!-- blocos dropdown -->
       <div class="toolbar-dropdown">
-        <button type="button" (click)="toggleBlocksDropdown()" class="dropdown-trigger" title="Tipos de bloco">
+        <button type="button" (click)="toggleBlocksDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.blockTypes' | translate">
           <i [ngClass]="currentBlockType"></i> <i class="fas fa-chevron-down"></i>
         </button>
         <div class="dropdown-menu" *ngIf="showBlocksDropdown" (click)="$event.stopPropagation()">
           <button type="button" (click)="selectBlockType('paragraph')" class="dropdown-item">
-            <i class="fas fa-paragraph"></i> Parágrafo
+            <i class="fas fa-paragraph"></i> {{ 'editor.blocks.paragraph' | translate }}
           </button>
           <button type="button" (click)="selectBlockType('h1')" class="dropdown-item">
-            <i class="fas fa-heading"></i> Título 1
+            <i class="fas fa-heading"></i> {{ 'editor.blocks.heading1' | translate }}
           </button>
           <button type="button" (click)="selectBlockType('h2')" class="dropdown-item">
-            <i class="fas fa-heading"></i> Título 2
+            <i class="fas fa-heading"></i> {{ 'editor.blocks.heading2' | translate }}
           </button>
           <button type="button" (click)="selectBlockType('h3')" class="dropdown-item">
-            <i class="fas fa-heading"></i> Título 3
+            <i class="fas fa-heading"></i> {{ 'editor.blocks.heading3' | translate }}
           </button>
           <button type="button" (click)="selectBlockType('h4')" class="dropdown-item">
-            <i class="fas fa-heading"></i> Título 4
+            <i class="fas fa-heading"></i> {{ 'editor.blocks.heading4' | translate }}
           </button>
           <button type="button" (click)="selectBlockType('h5')" class="dropdown-item">
-            <i class="fas fa-heading"></i> Título 5
+            <i class="fas fa-heading"></i> {{ 'editor.blocks.heading5' | translate }}
           </button>
           <button type="button" (click)="selectBlockType('h6')" class="dropdown-item">
-            <i class="fas fa-heading"></i> Título 6
+            <i class="fas fa-heading"></i> {{ 'editor.blocks.heading6' | translate }}
           </button>
           <hr class="dropdown-divider" />
           <button type="button" (click)="selectBlockType('quote')" class="dropdown-item">
-            <i class="fas fa-quote-left"></i> Citação
+            <i class="fas fa-quote-left"></i> {{ 'editor.blocks.quote' | translate }}
           </button>
           <button type="button" (click)="selectBlockType('code-block')" class="dropdown-item">
-            <i class="fas fa-code"></i> Bloco de Código
+            <i class="fas fa-code"></i> {{ 'editor.blocks.codeBlock' | translate }}
           </button>
         </div>
       </div>
 
       <!-- listas -->
-      <button type="button" (click)="toggleBulletList()" title="Lista com marcadores"><i class="fas fa-list-ul"></i></button>
-      <button type="button" (click)="toggleOrderedList()" title="Lista numerada"><i class="fas fa-list-ol"></i></button>
+      <button type="button" (click)="toggleBulletList()" [title]="'editor.toolbar.bulletList' | translate"><i class="fas fa-list-ul"></i></button>
+      <button type="button" (click)="toggleOrderedList()" [title]="'editor.toolbar.orderedList' | translate"><i class="fas fa-list-ol"></i></button>
     </div>
 
     <div class="toolbar-group">
       <!-- inline marks -->
-      <button type="button" (click)="toggleBold()" title="Negrito"><i class="fas fa-bold"></i></button>
-      <button type="button" (click)="toggleItalic()" title="Itálico"><i class="fas fa-italic"></i></button>
-      <button type="button" (click)="toggleCode()" title="Código"><i class="fas fa-code"></i></button>
-      <button type="button" (click)="toggleUnderline()" title="Sublinhado"><i class="fas fa-underline"></i></button>
+      <button type="button" (click)="toggleBold()" [title]="'editor.toolbar.bold' | translate"><i class="fas fa-bold"></i></button>
+      <button type="button" (click)="toggleItalic()" [title]="'editor.toolbar.italic' | translate"><i class="fas fa-italic"></i></button>
+      <button type="button" (click)="toggleCode()" [title]="'editor.toolbar.code' | translate"><i class="fas fa-code"></i></button>
+      <button type="button" (click)="toggleUnderline()" [title]="'editor.toolbar.underline' | translate"><i class="fas fa-underline"></i></button>
     </div>
 
     <div class="toolbar-group">
       <!-- link -->
-      <button type="button" (click)="setLink()" title="Inserir link"><i class="fas fa-link"></i></button>
-      <button type="button" (click)="unsetLink()" title="Remover link"><i class="fas fa-unlink"></i></button>
+      <button type="button" (click)="setLink()" [title]="'editor.toolbar.link' | translate"><i class="fas fa-link"></i></button>
+      <button type="button" (click)="unsetLink()" [title]="'editor.toolbar.unlink' | translate"><i class="fas fa-unlink"></i></button>
     </div>
 
     <div class="toolbar-group">
       <!-- mention dialog -->
-      <button type="button" (click)="openMentionDialog()" *ngIf="enableMention" title="Inserir Menção"><i class="fas fa-at"></i></button>
+      <button type="button" (click)="openMentionDialog()" *ngIf="enableMention" [title]="'editor.toolbar.mention' | translate"><i class="fas fa-at"></i></button>
     </div>
   </ng-container>
 
@@ -84,7 +84,7 @@
 <div class="mention-dialog-overlay" *ngIf="showMentionDialog" (click)="closeMentionDialog()">
   <div class="mention-dialog" (click)="$event.stopPropagation()">
     <div class="mention-dialog-header">
-      <h3>Escolher Menção</h3>
+      <h3>{{ 'editor.dialogs.mentionTitle' | translate }}</h3>
       <button class="close-btn" (click)="closeMentionDialog()">×</button>
     </div>
     <div class="mention-dialog-content">
@@ -109,28 +109,28 @@
     type="button" 
     class="balloon-button" 
     (click)="toggleBold(); closeBalloonMenu()"
-    title="Negrito">
+    [title]="'editor.balloonMenu.bold' | translate">
     <i class="fas fa-bold"></i>
   </button>
   <button 
     type="button" 
     class="balloon-button" 
     (click)="toggleItalic(); closeBalloonMenu()"
-    title="Itálico">
+    [title]="'editor.balloonMenu.italic' | translate">
     <i class="fas fa-italic"></i>
   </button>
   <button 
     type="button" 
     class="balloon-button" 
     (click)="toggleUnderline(); closeBalloonMenu()"
-    title="Sublinhado">
+    [title]="'editor.balloonMenu.underline' | translate">
     <i class="fas fa-underline"></i>
   </button>
   <button 
     type="button" 
     class="balloon-button" 
     (click)="toggleCode(); closeBalloonMenu()"
-    title="Código">
+    [title]="'editor.balloonMenu.code' | translate">
     <i class="fas fa-code"></i>
   </button>
   <div class="balloon-divider"></div>
@@ -138,7 +138,7 @@
     type="button" 
     class="balloon-button" 
     (click)="setLink(); closeBalloonMenu()"
-    title="Inserir link">
+    [title]="'editor.balloonMenu.link' | translate">
     <i class="fas fa-link"></i>
   </button>
 </div>

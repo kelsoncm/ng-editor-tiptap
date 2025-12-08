@@ -1,0 +1,81 @@
+{
+  "common": {
+    "submit": "Submit",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "yes": "Yes",
+    "no": "No",
+    "language": "Language"
+  },
+  "language": {
+    "en": "English",
+    "pt_br": "Português (Brasil)",
+    "es": "Español"
+  },
+  "app": {
+    "title": "Tiptap Editor",
+    "tabs": {
+      "form": "Form",
+      "htmlPreview": "HTML Preview",
+      "jsonPreview": "JSON Preview"
+    },
+    "editor": {
+      "heading": "Editor with Reactive Forms",
+      "placeholder": "Enter document text…"
+    }
+  },
+  "editor": {
+    "toolbar": {
+      "undo": "Undo",
+      "redo": "Redo",
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "code": "Code",
+      "blockTypes": "Block types",
+      "bulletList": "Bullet list",
+      "orderedList": "Ordered list",
+      "link": "Insert link",
+      "unlink": "Remove link",
+      "mention": "Insert mention",
+      "quote": "Quote",
+      "codeBlock": "Code block"
+    },
+    "blocks": {
+      "paragraph": "Paragraph",
+      "heading1": "Heading 1",
+      "heading2": "Heading 2",
+      "heading3": "Heading 3",
+      "heading4": "Heading 4",
+      "heading5": "Heading 5",
+      "heading6": "Heading 6",
+      "quote": "Quote",
+      "codeBlock": "Code block"
+    },
+    "dialogs": {
+      "mentionTitle": "Choose mention",
+      "linkPrompt": "Enter link URL",
+      "linkDefault": "https://"
+    },
+    "balloonMenu": {
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "code": "Code",
+      "link": "Insert link"
+    },
+    "messages": {
+      "noResults": "No results"
+    },
+    "placeholders": {
+      "default": "Type here…"
+    }
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidUrl": "Invalid URL"
+  }
+}

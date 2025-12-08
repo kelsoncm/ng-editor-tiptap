@@ -1,22 +1,35 @@
 <div class="tabs-container">
+  <div class="language-selector">
+    <label for="language-select">{{ 'common.language' | translate }}:</label>
+    <select 
+      id="language-select"
+      [(ngModel)]="currentLanguage"
+      (change)="setLanguage(currentLanguage)"
+      class="language-select">
+      <option *ngFor="let lang of supportedLanguages" [value]="lang">
+        {{ ('language.' + lang) | translate }}
+      </option>
+    </select>
+  </div>
+
   <div class="tabs-header">
     <button
       class="tab-button"
       [class.active]="activeTab === 'form'"
       (click)="selectTab('form')">
-      Formulário
+      {{ 'app.tabs.form' | translate }}
     </button>
     <button
       class="tab-button"
       [class.active]="activeTab === 'html'"
       (click)="selectTab('html')">
-      Preview HTML
+      {{ 'app.tabs.htmlPreview' | translate }}
     </button>
     <button
       class="tab-button"
       [class.active]="activeTab === 'json'"
       (click)="selectTab('json')">
-      Preview JSON
+      {{ 'app.tabs.jsonPreview' | translate }}
     </button>
   </div>
 
@@ -24,14 +37,14 @@
     <!-- Aba Formulário -->
     <div class="tab-pane" *ngIf="activeTab === 'form'">
       <form [formGroup]="form" (ngSubmit)="submit()">
-        <h2>Editor com Reactive Forms</h2>
+        <h2>{{ 'app.editor.heading' | translate }}</h2>
 
         <app-editor
           formControlName="body"
           [toolbarPreset]="'full'"
           [minHeight]="'250px'"
           [readonly]="false"
-          [placeholder]="'Digite o texto do documento…'"
+          [placeholder]="'app.editor.placeholder' | translate"
           [enableHeading]="true"
           [enableBold]="true"
           [enableItalic]="true"
@@ -41,20 +54,20 @@
           (blur)="onBlur()">
         </app-editor>
 
-        <button type="submit">Enviar</button>
+        <button type="submit">{{ 'common.submit' | translate }}</button>
 
       </form>
     </div>
 
     <!-- Aba Preview HTML -->
     <div class="tab-pane" *ngIf="activeTab === 'html'">
-        <h3>Preview (Reactive Forms)</h3>
+        <h3>{{ 'app.tabs.htmlPreview' | translate }}</h3>
         <div class="preview-box" [innerHTML]="form.get('body')?.value"></div>
     </div>
 
     <!-- Aba Preview JSON -->
     <div class="tab-pane" *ngIf="activeTab === 'json'">
-      <h2>Preview JSON</h2>
+      <h2>{{ 'app.tabs.jsonPreview' | translate }}</h2>
       <pre class="json-preview">{{ editorJson | json }}</pre>
     </div>
   </div>

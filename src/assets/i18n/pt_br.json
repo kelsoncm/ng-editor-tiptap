@@ -1,0 +1,81 @@
+{
+  "common": {
+    "submit": "Enviar",
+    "close": "Fechar",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "edit": "Editar",
+    "delete": "Deletar",
+    "yes": "Sim",
+    "no": "Não",
+    "language": "Idioma"
+  },
+  "language": {
+    "en": "English",
+    "pt_br": "Português (Brasil)",
+    "es": "Español"
+  },
+  "app": {
+    "title": "Editor Tiptap",
+    "tabs": {
+      "form": "Formulário",
+      "htmlPreview": "Preview HTML",
+      "jsonPreview": "Preview JSON"
+    },
+    "editor": {
+      "heading": "Editor com Reactive Forms",
+      "placeholder": "Digite o texto do documento…"
+    }
+  },
+  "editor": {
+    "toolbar": {
+      "undo": "Desfazer",
+      "redo": "Refazer",
+      "bold": "Negrito",
+      "italic": "Itálico",
+      "underline": "Sublinhado",
+      "code": "Código",
+      "blockTypes": "Tipos de bloco",
+      "bulletList": "Lista com marcadores",
+      "orderedList": "Lista numerada",
+      "link": "Inserir link",
+      "unlink": "Remover link",
+      "mention": "Inserir menção",
+      "quote": "Citação",
+      "codeBlock": "Bloco de código"
+    },
+    "blocks": {
+      "paragraph": "Parágrafo",
+      "heading1": "Título 1",
+      "heading2": "Título 2",
+      "heading3": "Título 3",
+      "heading4": "Título 4",
+      "heading5": "Título 5",
+      "heading6": "Título 6",
+      "quote": "Citação",
+      "codeBlock": "Bloco de código"
+    },
+    "dialogs": {
+      "mentionTitle": "Escolher menção",
+      "linkPrompt": "Informe a URL do link",
+      "linkDefault": "https://"
+    },
+    "balloonMenu": {
+      "bold": "Negrito",
+      "italic": "Itálico",
+      "underline": "Sublinhado",
+      "code": "Código",
+      "link": "Inserir link"
+    },
+    "messages": {
+      "noResults": "Nenhum resultado"
+    },
+    "placeholders": {
+      "default": "Digite aqui…"
+    }
+  },
+  "validation": {
+    "required": "Este campo é obrigatório",
+    "invalidUrl": "URL inválida"
+  }
+}

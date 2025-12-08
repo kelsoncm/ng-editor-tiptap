@@ -20,11 +20,13 @@ import Mention from '@tiptap/extension-mention';
 import { PluginKey } from '@tiptap/pm/state';
 import tippy, { Instance as TippyInstance } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { I18nService } from '../services/i18n.service';
 
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
   providers: [
@@ -42,7 +44,7 @@ export class EditorComponent
   editorElement!: ElementRef<HTMLDivElement>;
 
   // Config visual / comportamento
-  @Input() placeholder: string = 'Digite aqui…';
+  @Input() placeholder: string = 'editor.placeholders.default';
   @Input() minHeight: string = '200px';
   @Input() toolbarPreset: 'minimal' | 'full' = 'full';
 
@@ -75,6 +77,11 @@ export class EditorComponent
   isDisabled = false;
 
   private innerValue = '<p>Digite aqui…</p>';
+
+  constructor(
+    private i18nService: I18nService,
+    private translateService: TranslateService
+  ) {}
 
   ngAfterViewInit(): void {
     const extensions: AnyExtension[] = [
@@ -193,6 +200,11 @@ export class EditorComponent
       );
     }
 
+    // Traduz o placeholder
+    const translatedPlaceholder = this.isKeyTranslatable(this.placeholder)
+      ? this.translateSync(this.placeholder)
+      : this.placeholder;
+
     this.editor = new Editor({
       element: this.editorElement.nativeElement,
       extensions,
@@ -200,7 +212,7 @@ export class EditorComponent
       editable: !this.isDisabled,
       editorProps: {
         attributes: {
-          'data-placeholder': this.placeholder,
+          'data-placeholder': translatedPlaceholder,
         },
         handleDOMEvents: {
           focus: () => {
@@ -265,7 +277,7 @@ export class EditorComponent
     command: any
   ): void {
     if (items.length === 0) {
-      container.innerHTML = '<div class="mention-item">No results</div>';
+      container.innerHTML = `<div class="mention-item">${this.translateSync('editor.messages.noResults')}</div>`;
       return;
     }
 
@@ -336,7 +348,9 @@ export class EditorComponent
   // Link simples (abre prompt por enquanto)
   setLink(): void {
     const previousUrl = this.editor?.getAttributes('link')['href'] as string | undefined;
-    const url = window.prompt('Informe a URL do link', previousUrl || 'https://');
+    const prompt = this.translateSync('editor.dialogs.linkPrompt');
+    const defaultValue = this.translateSync('editor.dialogs.linkDefault');
+    const url = window.prompt(prompt, previousUrl || defaultValue);
 
     if (url === null) {
       return;
@@ -498,5 +512,23 @@ export class EditorComponent
     if (this.editor) {
       this.editor.setEditable(!isDisabled);
     }
+  }
+
+  /**
+   * Verifica se a string é uma chave de tradução
+   */
+  private isKeyTranslatable(key: string): boolean {
+    return key.includes('.');
+  }
+
+  /**
+   * Traduz uma chave de forma síncrona
+   */
+  private translateSync(key: string): string {
+    let result = '';
+    this.translateService.get(key).subscribe((res) => {
+      result = res;
+    });
+    return result || key;
   }
 }
