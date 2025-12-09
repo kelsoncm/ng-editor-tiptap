@@ -54,6 +54,11 @@
       "highlightColor": "Cor de realce",
       "removeHighlight": "Remover realce",
       "customColor": "Cor personalizada",
+      "textAlign": "Alinhamento de texto",
+      "alignLeft": "Alinhar à esquerda",
+      "alignCenter": "Alinhar ao centro",
+      "alignRight": "Alinhar à direita",
+      "alignJustify": "Justificar",
       "table": "Tabela"
     },
     "table": {

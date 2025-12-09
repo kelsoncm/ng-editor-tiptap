@@ -23,6 +23,7 @@ import { TextStyle } from '@tiptap/extension-text-style';
 import { FontFamily } from '@tiptap/extension-font-family';
 import { Color } from '@tiptap/extension-color';
 import { Highlight } from '@tiptap/extension-highlight';
+import { TextAlign } from '@tiptap/extension-text-align';
 import { Table } from '@tiptap/extension-table';
 import { TableRow } from '@tiptap/extension-table-row';
 import { TableHeader } from '@tiptap/extension-table-header';
@@ -74,6 +75,7 @@ export class EditorComponent
   @Input() enableFontSize = true;
   @Input() enableTextColor = true;
   @Input() enableHighlight = true;
+  @Input() enableTextAlign = true;
   @Input() enableTable = true;
   @Input() enableBalloonMenu = true;
   @Input() mentionItems: { id: string; label: string }[] = [
@@ -95,6 +97,7 @@ export class EditorComponent
   showFontSizeDropdown = false;
   showTextColorDropdown = false;
   showHighlightColorDropdown = false;
+  showTextAlignDropdown = false;
   showTableDropdown = false;
   showTableCellAlignDropdown = false;
   showTableCellBackgroundDropdown = false;
@@ -106,6 +109,7 @@ export class EditorComponent
   currentFontSize: string = '16px';
   currentTextColor: string = '#000000';
   currentHighlightColor: string = '#ffff00';
+  currentTextAlign: string = 'left';
   currentTableCellBackground: string = '#ffffff';
   captionPosition: 'top' | 'bottom' = 'top';
 
@@ -233,6 +237,15 @@ export class EditorComponent
     if (this.enableHighlight) {
       extensions.push(Highlight.configure({
         multicolor: true,
+      }));
+    }
+
+    // Add TextAlign extension
+    if (this.enableTextAlign) {
+      extensions.push(TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        alignments: ['left', 'center', 'right', 'justify'],
+        defaultAlignment: 'left',
       }));
     }
 
@@ -428,6 +441,7 @@ export class EditorComponent
         this.showFontSizeDropdown = false;
         this.showTextColorDropdown = false;
         this.showHighlightColorDropdown = false;
+        this.showTextAlignDropdown = false;
       }
     });
   }
@@ -656,6 +670,36 @@ export class EditorComponent
 
   removeHighlight(): void {
     this.editor?.chain().focus().unsetHighlight().run();
+  }
+
+  // Text Align methods
+  toggleTextAlignDropdown(): void {
+    this.showTextAlignDropdown = !this.showTextAlignDropdown;
+  }
+
+  closeTextAlignDropdown(): void {
+    this.showTextAlignDropdown = false;
+  }
+
+  setTextAlign(align: 'left' | 'center' | 'right' | 'justify'): void {
+    this.editor?.chain().focus().setTextAlign(align).run();
+    this.currentTextAlign = align;
+    this.closeTextAlignDropdown();
+  }
+
+  getTextAlignIcon(): string {
+    switch (this.currentTextAlign) {
+      case 'left':
+        return 'fas fa-align-left';
+      case 'center':
+        return 'fas fa-align-center';
+      case 'right':
+        return 'fas fa-align-right';
+      case 'justify':
+        return 'fas fa-align-justify';
+      default:
+        return 'fas fa-align-left';
+    }
   }
 
   // Table methods
@@ -947,6 +991,10 @@ export class EditorComponent
     } else {
       this.currentBlockType = 'fas fa-paragraph';
     }
+
+    // Update current text alignment
+    const textAlign = node.attrs['textAlign'] || 'left';
+    this.currentTextAlign = textAlign;
   }
 
   private updateBalloonMenuPosition(): void {

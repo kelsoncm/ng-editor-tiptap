@@ -54,6 +54,11 @@
       "highlightColor": "Highlight color",
       "removeHighlight": "Remove highlight",
       "customColor": "Custom color",
+      "textAlign": "Text alignment",
+      "alignLeft": "Align left",
+      "alignCenter": "Align center",
+      "alignRight": "Align right",
+      "alignJustify": "Justify",
       "table": "Table"
     },
     "table": {
