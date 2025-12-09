@@ -66,10 +66,14 @@
       "alignRight": "Alinear a la derecha",
       "alignJustify": "Justificar",
       "table": "Tabla",
-      "pageBreak": "Salto de página"
+      "pageBreak": "Salto de página",
+      "tableOfContents": "Tabla de Contenidos"
     },
     "pageBreak": {
       "label": "Salto de Página"
+    },
+    "tableOfContents": {
+      "noHeadings": "No se encontraron encabezados. Agregue encabezados (H1, H2, H3) al documento para generar la tabla de contenido."
     },
     "table": {
       "insert": "Insertar tabla",

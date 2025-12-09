@@ -41,6 +41,7 @@ import { Indent } from './extensions/indent';
 import { CustomOrderedList, OrderedListType } from './extensions/ordered-list';
 import { CustomBulletList, BulletListType } from './extensions/bullet-list';
 import { PageBreak } from './extensions/page-break';
+import TableOfContents from '@tiptap/extension-table-of-contents';
 
 @Component({
   selector: 'app-editor',
@@ -84,6 +85,7 @@ export class EditorComponent
   @Input() enableTable = true;
   @Input() enableBalloonMenu = true;
   @Input() enablePageBreak = true;
+  @Input() enableTableOfContents = false;
   @Input() mentionItems: { id: string; label: string }[] = [
     { id: 'inicioEdital', label: 'inicioEdital' },
     { id: 'fimEdital', label: 'fimEdital' },
@@ -122,6 +124,8 @@ export class EditorComponent
   showBalloonMenu = false;
   balloonMenuPosition = { top: '0px', left: '0px' };
   isInTable = false;
+  showTableOfContents = false;
+  tableOfContentsData: any[] = [];
   currentBlockType: string = 'fas fa-paragraph';
   currentLineHeight: string = 'normal';
   currentFontFamily: string = 'Default';
@@ -330,6 +334,11 @@ export class EditorComponent
       extensions.push(PageBreak);
     }
 
+    // Add TableOfContents extension
+    if (this.enableTableOfContents) {
+      extensions.push(TableOfContents);
+    }
+
     if (this.enableMention) {
       const self = this;
       extensions.push(
@@ -485,6 +494,9 @@ export class EditorComponent
         this.jsonChange.emit(json);
         this.updateCurrentBlockType();
         this.updateCounts();
+        if (this.showTableOfContents) {
+          this.updateTableOfContents();
+        }
       },
       onSelectionUpdate: ({ editor }) => {
         this.updateCurrentBlockType();
@@ -1192,6 +1204,33 @@ export class EditorComponent
 
   setPageBreak(): void {
     this.editor?.chain().focus().setPageBreak().run();
+  }
+
+  toggleTableOfContents(): void {
+    this.showTableOfContents = !this.showTableOfContents;
+    if (this.showTableOfContents) {
+      this.updateTableOfContents();
+    }
+  }
+
+  updateTableOfContents(): void {
+    if (this.editor && this.enableTableOfContents) {
+      const storage = this.editor.storage.tableOfContents;
+      if (storage && storage.content) {
+        this.tableOfContentsData = storage.content;
+      }
+    }
+  }
+
+  scrollToHeading(item: any): void {
+    if (item.dom) {
+      item.dom.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Highlight the heading temporarily
+      item.dom.style.backgroundColor = '#e7f1ff';
+      setTimeout(() => {
+        item.dom.style.backgroundColor = '';
+      }, 1000);
+    }
   }
 
   openMentionDialog(): void {

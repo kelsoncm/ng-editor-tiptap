@@ -285,6 +285,17 @@
     </div>
 
     <div class="toolbar-group">
+      <!-- Table of Contents toggle button -->
+      <button 
+        type="button" 
+        (click)="toggleTableOfContents()" 
+        class="toolbar-btn"
+        [class.active]="showTableOfContents"
+        [title]="'editor.toolbar.tableOfContents' | translate"
+        *ngIf="enableTableOfContents">
+        <i class="fas fa-list-ol"></i>
+      </button>
+
       <!-- Insert dropdown -->
       <div class="toolbar-dropdown">
         <button type="button" (click)="toggleInsertDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.insert' | translate">
@@ -524,6 +535,32 @@
       <i class="fas fa-arrow-down"></i>
     </button>
   </ng-container>
+</div>
+
+<!-- Table of Contents Panel -->
+<div class="table-of-contents-panel" *ngIf="showTableOfContents && enableTableOfContents">
+  <div class="toc-header">
+    <h3>{{ 'editor.toolbar.tableOfContents' | translate }}</h3>
+    <button type="button" class="close-btn" (click)="showTableOfContents = false">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="toc-content">
+    <div *ngIf="tableOfContentsData.length === 0" class="toc-empty">
+      {{ 'editor.tableOfContents.noHeadings' | translate }}
+    </div>
+    <ul class="toc-list" *ngIf="tableOfContentsData.length > 0">
+      <li *ngFor="let item of tableOfContentsData" 
+          [attr.data-level]="item.level"
+          class="toc-item"
+          [class.active]="item.isActive">
+        <a (click)="scrollToHeading(item)" class="toc-link">
+          <span class="toc-index">{{ item.itemIndex }}.</span>
+          <span class="toc-text">{{ item.textContent }}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 </div>
 
 <div

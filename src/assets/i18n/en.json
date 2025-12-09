@@ -64,10 +64,14 @@
       "alignRight": "Align right",
       "alignJustify": "Justify",
       "table": "Table",
-      "pageBreak": "Page break"
+      "pageBreak": "Page break",
+      "tableOfContents": "Table of Contents"
     },
     "pageBreak": {
       "label": "Page Break"
+    },
+    "tableOfContents": {
+      "noHeadings": "No headings found. Add headings (H1, H2, H3) to the document to generate the table of contents."
     },
     "table": {
       "insert": "Insert table",

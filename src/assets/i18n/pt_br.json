@@ -66,10 +66,14 @@
       "alignRight": "Alinhar à direita",
       "alignJustify": "Justificar",
       "table": "Tabela",
-      "pageBreak": "Quebra de página"
+      "pageBreak": "Quebra de página",
+      "tableOfContents": "Sumário"
     },
     "pageBreak": {
       "label": "Quebra de Página"
+    },
+    "tableOfContents": {
+      "noHeadings": "Nenhum título encontrado. Adicione títulos (H1, H2, H3) ao documento para gerar o sumário."
     },
     "table": {
       "insert": "Inserir tabela",
