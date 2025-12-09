@@ -99,6 +99,106 @@
       </div>
     </div>
 
+    <div class="toolbar-group" *ngIf="enableFontFamily || enableFontSize">
+      <!-- font family dropdown -->
+      <div class="toolbar-dropdown" *ngIf="enableFontFamily">
+        <button type="button" (click)="toggleFontFamilyDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.fontFamily' | translate">
+          <i class="fas fa-font"></i> {{ getFontFamilyLabel() }} <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu" *ngIf="showFontFamilyDropdown" (click)="$event.stopPropagation()">
+          <button 
+            type="button" 
+            *ngFor="let font of fontFamilies" 
+            (click)="setFontFamily(font.value)" 
+            class="dropdown-item"
+            [style.font-family]="font.value !== 'Default' ? font.value : 'inherit'">
+            <i class="fas fa-check" [style.visibility]="currentFontFamily === font.value ? 'visible' : 'hidden'"></i> {{ font.label }}
+          </button>
+        </div>
+      </div>
+
+      <!-- font size dropdown -->
+      <div class="toolbar-dropdown" *ngIf="enableFontSize">
+        <button type="button" (click)="toggleFontSizeDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.fontSize' | translate">
+          <i class="fas fa-text-height"></i> {{ getFontSizeLabel() }} <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu" *ngIf="showFontSizeDropdown" (click)="$event.stopPropagation()">
+          <button 
+            type="button" 
+            *ngFor="let size of fontSizes" 
+            (click)="setFontSize(size.value)" 
+            class="dropdown-item">
+            <i class="fas fa-check" [style.visibility]="currentFontSize === size.value ? 'visible' : 'hidden'"></i> {{ size.label }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolbar-group" *ngIf="enableTextColor || enableHighlight">
+      <!-- text color picker -->
+      <div class="toolbar-color-picker" *ngIf="enableTextColor">
+        <div class="toolbar-dropdown">
+          <button type="button" (click)="toggleTextColorDropdown()" class="dropdown-trigger color-trigger" [title]="'editor.toolbar.textColor' | translate">
+            <i class="fas fa-font"></i>
+            <span class="color-preview" [style.background-color]="currentTextColor"></span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="dropdown-menu color-dropdown-menu" *ngIf="showTextColorDropdown" (click)="$event.stopPropagation()">
+            <div class="color-grid">
+              <button 
+                type="button"
+                *ngFor="let color of textColors"
+                class="color-option"
+                [style.background-color]="color.value"
+                [title]="color.label"
+                (click)="selectTextColor(color.value)">
+                <i class="fas fa-check" *ngIf="currentTextColor === color.value"></i>
+              </button>
+            </div>
+            <div class="color-picker-wrapper">
+              <label class="custom-color-label">
+                {{ 'editor.toolbar.customColor' | translate }}
+                <input type="color" [value]="currentTextColor" (change)="setTextColorFromPicker($event)" class="color-input-small">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- highlight color picker -->
+      <div class="toolbar-color-picker" *ngIf="enableHighlight">
+        <div class="toolbar-dropdown">
+          <button type="button" (click)="toggleHighlightColorDropdown()" class="dropdown-trigger color-trigger" [title]="'editor.toolbar.highlightColor' | translate">
+            <i class="fas fa-highlighter"></i>
+            <span class="color-preview" [style.background-color]="currentHighlightColor"></span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="dropdown-menu color-dropdown-menu" *ngIf="showHighlightColorDropdown" (click)="$event.stopPropagation()">
+            <div class="color-grid">
+              <button 
+                type="button"
+                *ngFor="let color of highlightColors"
+                class="color-option"
+                [style.background-color]="color.value"
+                [title]="color.label"
+                (click)="selectHighlightColor(color.value)">
+                <i class="fas fa-check" *ngIf="currentHighlightColor === color.value"></i>
+              </button>
+            </div>
+            <div class="color-picker-wrapper">
+              <label class="custom-color-label">
+                {{ 'editor.toolbar.customColor' | translate }}
+                <input type="color" [value]="currentHighlightColor" (change)="setHighlightColorFromPicker($event)" class="color-input-small">
+              </label>
+            </div>
+          </div>
+        </div>
+        <button type="button" (click)="removeHighlight()" [title]="'editor.toolbar.removeHighlight' | translate" class="remove-highlight-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
     <div class="toolbar-group">
       <!-- mention dialog -->
       <button type="button" (click)="openMentionDialog()" *ngIf="enableMention" [title]="'editor.toolbar.mention' | translate"><i class="fas fa-at"></i></button>

@@ -19,12 +19,17 @@ import StarterKit from '@tiptap/starter-kit';
 import Mention from '@tiptap/extension-mention';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { FontFamily } from '@tiptap/extension-font-family';
+import { Color } from '@tiptap/extension-color';
+import { Highlight } from '@tiptap/extension-highlight';
 import { PluginKey } from '@tiptap/pm/state';
 import tippy, { Instance as TippyInstance } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { I18nService } from '../services/i18n.service';
 import { LineHeight } from './extensions/line-height';
+import { FontSize } from './extensions/font-size';
 
 @Component({
   selector: 'app-editor',
@@ -60,6 +65,10 @@ export class EditorComponent
   @Input() enableSubscript = true;
   @Input() enableSuperscript = true;
   @Input() enableLineHeight = true;
+  @Input() enableFontFamily = true;
+  @Input() enableFontSize = true;
+  @Input() enableTextColor = true;
+  @Input() enableHighlight = true;
   @Input() mentionItems: { id: string; label: string }[] = [
     { id: 'inicioEdital', label: 'inicioEdital' },
     { id: 'fimEdital', label: 'fimEdital' },
@@ -74,10 +83,72 @@ export class EditorComponent
   showMentionDialog = false;
   showBlocksDropdown = false;
   showLineHeightDropdown = false;
+  showFontFamilyDropdown = false;
+  showFontSizeDropdown = false;
+  showTextColorDropdown = false;
+  showHighlightColorDropdown = false;
   showBalloonMenu = false;
   balloonMenuPosition = { top: '0px', left: '0px' };
   currentBlockType: string = 'fas fa-paragraph';
   currentLineHeight: string = 'normal';
+  currentFontFamily: string = 'Default';
+  currentFontSize: string = '16px';
+  currentTextColor: string = '#000000';
+  currentHighlightColor: string = '#ffff00';
+
+  fontFamilies = [
+    { value: 'Default', label: 'Default' },
+    { value: 'Arial, sans-serif', label: 'Arial' },
+    { value: '"Times New Roman", serif', label: 'Times New Roman' },
+    { value: '"Courier New", monospace', label: 'Courier New' },
+    { value: 'Georgia, serif', label: 'Georgia' },
+    { value: 'Verdana, sans-serif', label: 'Verdana' },
+    { value: 'Tahoma, sans-serif', label: 'Tahoma' },
+    { value: '"Comic Sans MS", cursive', label: 'Comic Sans MS' },
+  ];
+
+  fontSizes = [
+    { value: '10px', label: '10' },
+    { value: '12px', label: '12' },
+    { value: '14px', label: '14' },
+    { value: '16px', label: '16' },
+    { value: '18px', label: '18' },
+    { value: '20px', label: '20' },
+    { value: '24px', label: '24' },
+    { value: '28px', label: '28' },
+    { value: '32px', label: '32' },
+    { value: '36px', label: '36' },
+  ];
+
+  textColors = [
+    { value: '#000000', label: 'Preto' },
+    { value: '#FFFFFF', label: 'Branco' },
+    { value: '#FF0000', label: 'Vermelho' },
+    { value: '#00FF00', label: 'Verde' },
+    { value: '#0000FF', label: 'Azul' },
+    { value: '#FFFF00', label: 'Amarelo' },
+    { value: '#FF00FF', label: 'Magenta' },
+    { value: '#00FFFF', label: 'Ciano' },
+    { value: '#FFA500', label: 'Laranja' },
+    { value: '#800080', label: 'Roxo' },
+    { value: '#808080', label: 'Cinza' },
+    { value: '#A52A2A', label: 'Marrom' },
+  ];
+
+  highlightColors = [
+    { value: '#FFFF00', label: 'Amarelo' },
+    { value: '#00FF00', label: 'Verde' },
+    { value: '#00FFFF', label: 'Ciano' },
+    { value: '#FF00FF', label: 'Magenta' },
+    { value: '#FFA500', label: 'Laranja' },
+    { value: '#FFB6C1', label: 'Rosa' },
+    { value: '#90EE90', label: 'Verde Claro' },
+    { value: '#ADD8E6', label: 'Azul Claro' },
+    { value: '#FFFFE0', label: 'Amarelo Claro' },
+    { value: '#FFE4B5', label: 'Pêssego' },
+    { value: '#E6E6FA', label: 'Lavanda' },
+    { value: '#F0E68C', label: 'Khaki' },
+  ];
   private editor!: Editor;
 
   // ControlValueAccessor
@@ -120,6 +191,35 @@ export class EditorComponent
       extensions.push(LineHeight.configure({
         types: ['paragraph', 'heading'],
         defaultLineHeight: 'normal',
+      }));
+    }
+
+    // Add TextStyle extension (required for Font Family, Color)
+    if (this.enableFontFamily || this.enableTextColor) {
+      extensions.push(TextStyle);
+    }
+
+    // Add Font Family extension
+    if (this.enableFontFamily) {
+      extensions.push(FontFamily);
+    }
+
+    // Add Font Size extension
+    if (this.enableFontSize) {
+      extensions.push(FontSize.configure({
+        types: ['textStyle'],
+      }));
+    }
+
+    // Add Color extension
+    if (this.enableTextColor) {
+      extensions.push(Color);
+    }
+
+    // Add Highlight extension
+    if (this.enableHighlight) {
+      extensions.push(Highlight.configure({
+        multicolor: true,
       }));
     }
 
@@ -288,9 +388,13 @@ export class EditorComponent
     document.addEventListener('click', (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       
-      if (!target.closest('.toolbar-dropdown')) {
+      if (!target.closest('.toolbar-dropdown') && !target.closest('.toolbar-color-picker')) {
         this.showBlocksDropdown = false;
         this.showLineHeightDropdown = false;
+        this.showFontFamilyDropdown = false;
+        this.showFontSizeDropdown = false;
+        this.showTextColorDropdown = false;
+        this.showHighlightColorDropdown = false;
       }
     });
   }
@@ -413,6 +517,103 @@ export class EditorComponent
       default:
         return this.translateSync('editor.lineHeight.simple');
     }
+  }
+
+  // Font Family methods
+  toggleFontFamilyDropdown(): void {
+    this.showFontFamilyDropdown = !this.showFontFamilyDropdown;
+  }
+
+  closeFontFamilyDropdown(): void {
+    this.showFontFamilyDropdown = false;
+  }
+
+  setFontFamily(fontFamily: string): void {
+    if (fontFamily === 'Default') {
+      this.editor?.chain().focus().unsetFontFamily().run();
+    } else {
+      this.editor?.chain().focus().setFontFamily(fontFamily).run();
+    }
+    this.currentFontFamily = fontFamily;
+    this.closeFontFamilyDropdown();
+  }
+
+  getFontFamilyLabel(): string {
+    const family = this.fontFamilies.find(f => f.value === this.currentFontFamily);
+    return family ? family.label : 'Default';
+  }
+
+  // Font Size methods
+  toggleFontSizeDropdown(): void {
+    this.showFontSizeDropdown = !this.showFontSizeDropdown;
+  }
+
+  closeFontSizeDropdown(): void {
+    this.showFontSizeDropdown = false;
+  }
+
+  setFontSize(fontSize: string): void {
+    this.editor?.chain().focus().setFontSize(fontSize).run();
+    this.currentFontSize = fontSize;
+    this.closeFontSizeDropdown();
+  }
+
+  getFontSizeLabel(): string {
+    return this.currentFontSize.replace('px', '');
+  }
+
+  // Text Color methods
+  toggleTextColorDropdown(): void {
+    this.showTextColorDropdown = !this.showTextColorDropdown;
+  }
+
+  closeTextColorDropdown(): void {
+    this.showTextColorDropdown = false;
+  }
+
+  setTextColor(color: string): void {
+    this.editor?.chain().focus().setColor(color).run();
+    this.currentTextColor = color;
+  }
+
+  setTextColorFromPicker(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const color = input.value;
+    this.setTextColor(color);
+  }
+
+  selectTextColor(color: string): void {
+    this.setTextColor(color);
+    this.closeTextColorDropdown();
+  }
+
+  // Highlight Color methods
+  toggleHighlightColorDropdown(): void {
+    this.showHighlightColorDropdown = !this.showHighlightColorDropdown;
+  }
+
+  closeHighlightColorDropdown(): void {
+    this.showHighlightColorDropdown = false;
+  }
+
+  setHighlightColor(color: string): void {
+    this.editor?.chain().focus().setHighlight({ color }).run();
+    this.currentHighlightColor = color;
+  }
+
+  setHighlightColorFromPicker(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const color = input.value;
+    this.setHighlightColor(color);
+  }
+
+  selectHighlightColor(color: string): void {
+    this.setHighlightColor(color);
+    this.closeHighlightColorDropdown();
+  }
+
+  removeHighlight(): void {
+    this.editor?.chain().focus().unsetHighlight().run();
   }
 
   // Link simples (abre prompt por enquanto)

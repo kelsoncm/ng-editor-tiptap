@@ -46,7 +46,13 @@
       "unlink": "Remove link",
       "mention": "Insert mention",
       "quote": "Quote",
-      "codeBlock": "Code block"
+      "codeBlock": "Code block",
+      "fontFamily": "Font",
+      "fontSize": "Font size",
+      "textColor": "Text color",
+      "highlightColor": "Highlight color",
+      "removeHighlight": "Remove highlight",
+      "customColor": "Custom color"
     },
     "blocks": {
       "paragraph": "Paragraph",
