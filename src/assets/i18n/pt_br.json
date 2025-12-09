@@ -33,6 +33,7 @@
       "redo": "Refazer",
       "bold": "Negrito",
       "italic": "Itálico",
+      "textFormatting": "Formatação de texto",
       "strike": "Tachado",
       "underline": "Sublinhado",
       "code": "Código",

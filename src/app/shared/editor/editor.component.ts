@@ -89,6 +89,7 @@ export class EditorComponent
 
   showMentionDialog = false;
   showBlocksDropdown = false;
+  showTextFormattingDropdown = false;
   showLineHeightDropdown = false;
   showFontFamilyDropdown = false;
   showFontSizeDropdown = false;
@@ -520,6 +521,15 @@ export class EditorComponent
 
   toggleSuperscript(): void {
     this.editor?.chain().focus().toggleSuperscript().run();
+  }
+
+  // Text Formatting Dropdown
+  toggleTextFormattingDropdown(): void {
+    this.showTextFormattingDropdown = !this.showTextFormattingDropdown;
+  }
+
+  closeTextFormattingDropdown(): void {
+    this.showTextFormattingDropdown = false;
   }
 
   setLineHeight(lineHeight: string): void {
