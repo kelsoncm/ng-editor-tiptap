@@ -43,6 +43,8 @@
       "blockTypes": "Block types",
       "bulletList": "Bullet list",
       "orderedList": "Ordered list",
+      "indent": "Increase indent",
+      "outdent": "Decrease indent",
       "link": "Insert link",
       "unlink": "Remove link",
       "mention": "Insert mention",

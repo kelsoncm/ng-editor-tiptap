@@ -57,6 +57,10 @@
       <!-- listas -->
       <button type="button" (click)="toggleBulletList()" [title]="'editor.toolbar.bulletList' | translate"><i class="fas fa-list-ul"></i></button>
       <button type="button" (click)="toggleOrderedList()" [title]="'editor.toolbar.orderedList' | translate"><i class="fas fa-list-ol"></i></button>
+      
+      <!-- indent / outdent -->
+      <button type="button" (click)="indent()" [title]="'editor.toolbar.indent' | translate"><i class="fas fa-indent"></i></button>
+      <button type="button" (click)="outdent()" [title]="'editor.toolbar.outdent' | translate"><i class="fas fa-outdent"></i></button>
     </div>
 
     <div class="toolbar-group">

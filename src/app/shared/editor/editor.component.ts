@@ -36,6 +36,7 @@ import { I18nService } from '../services/i18n.service';
 import { LineHeight } from './extensions/line-height';
 import { FontSize } from './extensions/font-size';
 import { TableCaption } from './extensions/table-caption';
+import { Indent } from './extensions/indent';
 
 @Component({
   selector: 'app-editor',
@@ -248,6 +249,13 @@ export class EditorComponent
         defaultAlignment: 'left',
       }));
     }
+
+    // Add Indent extension
+    extensions.push(Indent.configure({
+      types: ['paragraph', 'heading', 'blockquote'],
+      indentLevels: [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300],
+      defaultIndentLevel: 0,
+    }));
 
     // Add Table extensions
     if (this.enableTable) {
@@ -499,6 +507,26 @@ export class EditorComponent
 
   toggleOrderedList(): void {
     this.editor?.chain().focus().toggleOrderedList().run();
+  }
+
+  indent(): void {
+    // Try to indent list item first
+    if (this.editor?.can().sinkListItem('listItem')) {
+      this.editor?.chain().focus().sinkListItem('listItem').run();
+    } else {
+      // Otherwise, indent the block
+      this.editor?.chain().focus().indent().run();
+    }
+  }
+
+  outdent(): void {
+    // Try to outdent list item first
+    if (this.editor?.can().liftListItem('listItem')) {
+      this.editor?.chain().focus().liftListItem('listItem').run();
+    } else {
+      // Otherwise, outdent the block
+      this.editor?.chain().focus().outdent().run();
+    }
   }
 
   toggleBlockquote(): void {

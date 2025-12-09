@@ -43,6 +43,8 @@
       "blockTypes": "Tipos de bloco",
       "bulletList": "Lista com marcadores",
       "orderedList": "Lista numerada",
+      "indent": "Aumentar recuo",
+      "outdent": "Diminuir recuo",
       "link": "Inserir link",
       "unlink": "Remover link",
       "mention": "Inserir menção",
