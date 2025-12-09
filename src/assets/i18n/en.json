@@ -63,7 +63,11 @@
       "alignCenter": "Align center",
       "alignRight": "Align right",
       "alignJustify": "Justify",
-      "table": "Table"
+      "table": "Table",
+      "pageBreak": "Page break"
+    },
+    "pageBreak": {
+      "label": "Page Break"
     },
     "table": {
       "insert": "Insert table",

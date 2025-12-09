@@ -40,6 +40,7 @@ import { TableCaption } from './extensions/table-caption';
 import { Indent } from './extensions/indent';
 import { CustomOrderedList, OrderedListType } from './extensions/ordered-list';
 import { CustomBulletList, BulletListType } from './extensions/bullet-list';
+import { PageBreak } from './extensions/page-break';
 
 @Component({
   selector: 'app-editor',
@@ -82,6 +83,7 @@ export class EditorComponent
   @Input() enableTextAlign = true;
   @Input() enableTable = true;
   @Input() enableBalloonMenu = true;
+  @Input() enablePageBreak = true;
   @Input() mentionItems: { id: string; label: string }[] = [
     { id: 'inicioEdital', label: 'inicioEdital' },
     { id: 'fimEdital', label: 'fimEdital' },
@@ -321,6 +323,11 @@ export class EditorComponent
         }),
         TableCaption
       );
+    }
+
+    // Add PageBreak extension
+    if (this.enablePageBreak) {
+      extensions.push(PageBreak);
     }
 
     if (this.enableMention) {
@@ -1183,6 +1190,10 @@ export class EditorComponent
     this.editor?.chain().focus().unsetLink().run();
   }
 
+  setPageBreak(): void {
+    this.editor?.chain().focus().setPageBreak().run();
+  }
+
   openMentionDialog(): void {
     this.showMentionDialog = true;
   }
@@ -1405,11 +1416,7 @@ export class EditorComponent
    * Traduz uma chave de forma síncrona
    */
   private translateSync(key: string): string {
-    let result = '';
-    this.translateService.get(key).subscribe((res) => {
-      result = res;
-    });
-    return result || key;
+    return this.translateService.instant(key) || key;
   }
 
   /**

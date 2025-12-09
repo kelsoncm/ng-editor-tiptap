@@ -65,7 +65,11 @@
       "alignCenter": "Alinear al centro",
       "alignRight": "Alinear a la derecha",
       "alignJustify": "Justificar",
-      "table": "Tabla"
+      "table": "Tabla",
+      "pageBreak": "Salto de página"
+    },
+    "pageBreak": {
+      "label": "Salto de Página"
     },
     "table": {
       "insert": "Insertar tabla",

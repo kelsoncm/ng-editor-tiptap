@@ -1065,3 +1065,67 @@
   }
 }
 
+// Page Break styles
+::ng-deep .page-break {
+  position: relative;
+  margin: 2rem 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    .page-break-line {
+      border-color: #0050a4;
+    }
+
+    .page-break-text {
+      background-color: #0050a4;
+      color: white;
+    }
+  }
+
+  .page-break-line {
+    width: 100%;
+    border-top: 2px dashed #ccc;
+    transition: border-color 0.2s ease;
+  }
+
+  .page-break-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f8f8f8;
+    color: #666;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+}
+
+// Print styles for page break
+@media print {
+  ::ng-deep .page-break {
+    page-break-after: always;
+    break-after: page;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: none;
+
+    .page-break-line,
+    .page-break-text {
+      display: none;
+    }
+  }
+}

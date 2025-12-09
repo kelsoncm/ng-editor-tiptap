@@ -303,6 +303,9 @@
           <button type="button" (click)="insertTable(); closeInsertDropdown()" class="dropdown-item" *ngIf="enableTable">
             <i class="fas fa-table"></i> {{ 'editor.toolbar.insertTable' | translate }}
           </button>
+          <button type="button" (click)="setPageBreak(); closeInsertDropdown()" class="dropdown-item" *ngIf="enablePageBreak">
+            <i class="fas fa-file-pdf"></i> {{ 'editor.toolbar.pageBreak' | translate }}
+          </button>
         </div>
       </div>
     </div>
