@@ -52,7 +52,32 @@
       "textColor": "Text color",
       "highlightColor": "Highlight color",
       "removeHighlight": "Remove highlight",
-      "customColor": "Custom color"
+      "customColor": "Custom color",
+      "table": "Table"
+    },
+    "table": {
+      "insert": "Insert table",
+      "delete": "Delete table",
+      "duplicate": "Duplicate table",
+      "addCaption": "Add caption",
+      "captionPosition": "Caption position",
+      "toggleHeader": "Toggle header row",
+      "addRowBefore": "Insert row above",
+      "addRowAfter": "Insert row below",
+      "deleteRow": "Delete row",
+      "selectRow": "Select row",
+      "addColumnBefore": "Insert column before",
+      "addColumnAfter": "Insert column after",
+      "deleteColumn": "Delete column",
+      "selectColumn": "Select column",
+      "mergeCells": "Merge cells",
+      "splitCell": "Split cell",
+      "cellAlign": "Vertical alignment",
+      "alignTop": "Align top",
+      "alignMiddle": "Align middle",
+      "alignBottom": "Align bottom",
+      "cellBackground": "Cell background color",
+      "removeBackground": "Remove background color"
     },
     "blocks": {
       "paragraph": "Paragraph",

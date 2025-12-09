@@ -52,7 +52,32 @@
       "textColor": "Cor do texto",
       "highlightColor": "Cor de realce",
       "removeHighlight": "Remover realce",
-      "customColor": "Cor personalizada"
+      "customColor": "Cor personalizada",
+      "table": "Tabela"
+    },
+    "table": {
+      "insert": "Inserir tabela",
+      "delete": "Excluir tabela",
+      "duplicate": "Duplicar tabela",
+      "addCaption": "Adicionar legenda",
+      "captionPosition": "Posição da legenda",
+      "toggleHeader": "Alternar linha de cabeçalho",
+      "addRowBefore": "Inserir linha acima",
+      "addRowAfter": "Inserir linha abaixo",
+      "deleteRow": "Excluir linha",
+      "selectRow": "Selecionar linha",
+      "addColumnBefore": "Inserir coluna à esquerda",
+      "addColumnAfter": "Inserir coluna à direita",
+      "deleteColumn": "Excluir coluna",
+      "selectColumn": "Selecionar coluna",
+      "mergeCells": "Mesclar células",
+      "splitCell": "Dividir célula",
+      "cellAlign": "Alinhamento vertical",
+      "alignTop": "Alinhar no topo",
+      "alignMiddle": "Alinhar no meio",
+      "alignBottom": "Alinhar embaixo",
+      "cellBackground": "Cor de fundo da célula",
+      "removeBackground": "Remover cor de fundo"
     },
     "blocks": {
       "paragraph": "Parágrafo",

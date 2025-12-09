@@ -23,6 +23,10 @@ import { TextStyle } from '@tiptap/extension-text-style';
 import { FontFamily } from '@tiptap/extension-font-family';
 import { Color } from '@tiptap/extension-color';
 import { Highlight } from '@tiptap/extension-highlight';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { TableCell } from '@tiptap/extension-table-cell';
 import { PluginKey } from '@tiptap/pm/state';
 import tippy, { Instance as TippyInstance } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
@@ -30,6 +34,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { I18nService } from '../services/i18n.service';
 import { LineHeight } from './extensions/line-height';
 import { FontSize } from './extensions/font-size';
+import { TableCaption } from './extensions/table-caption';
 
 @Component({
   selector: 'app-editor',
@@ -69,6 +74,7 @@ export class EditorComponent
   @Input() enableFontSize = true;
   @Input() enableTextColor = true;
   @Input() enableHighlight = true;
+  @Input() enableTable = true;
   @Input() mentionItems: { id: string; label: string }[] = [
     { id: 'inicioEdital', label: 'inicioEdital' },
     { id: 'fimEdital', label: 'fimEdital' },
@@ -87,6 +93,9 @@ export class EditorComponent
   showFontSizeDropdown = false;
   showTextColorDropdown = false;
   showHighlightColorDropdown = false;
+  showTableDropdown = false;
+  showTableCellAlignDropdown = false;
+  showTableCellBackgroundDropdown = false;
   showBalloonMenu = false;
   balloonMenuPosition = { top: '0px', left: '0px' };
   currentBlockType: string = 'fas fa-paragraph';
@@ -95,6 +104,8 @@ export class EditorComponent
   currentFontSize: string = '16px';
   currentTextColor: string = '#000000';
   currentHighlightColor: string = '#ffff00';
+  currentTableCellBackground: string = '#ffffff';
+  captionPosition: 'top' | 'bottom' = 'top';
 
   fontFamilies = [
     { value: 'Default', label: 'Default' },
@@ -221,6 +232,26 @@ export class EditorComponent
       extensions.push(Highlight.configure({
         multicolor: true,
       }));
+    }
+
+    // Add Table extensions
+    if (this.enableTable) {
+      extensions.push(
+        Table.configure({
+          resizable: true,
+          HTMLAttributes: {
+            class: 'tiptap-table',
+          },
+        }),
+        TableRow,
+        TableHeader,
+        TableCell.configure({
+          HTMLAttributes: {
+            class: 'tiptap-table-cell',
+          },
+        }),
+        TableCaption
+      );
     }
 
     if (this.enableMention) {
@@ -614,6 +645,187 @@ export class EditorComponent
 
   removeHighlight(): void {
     this.editor?.chain().focus().unsetHighlight().run();
+  }
+
+  // Table methods
+  toggleTableDropdown(): void {
+    this.showTableDropdown = !this.showTableDropdown;
+  }
+
+  closeTableDropdown(): void {
+    this.showTableDropdown = false;
+  }
+
+  insertTable(): void {
+    this.editor
+      ?.chain()
+      .focus()
+      .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+      .run();
+    this.closeTableDropdown();
+  }
+
+  deleteTable(): void {
+    this.editor?.chain().focus().deleteTable().run();
+    this.closeTableDropdown();
+  }
+
+  duplicateTable(): void {
+    // Get current table content
+    const { state } = this.editor!;
+    const { selection } = state;
+    const { $from } = selection;
+    
+    // Find the table node
+    let tableNode: any = null;
+    let tablePos = -1;
+    
+    for (let d = $from.depth; d > 0; d--) {
+      const node = $from.node(d);
+      if (node.type.name === 'table') {
+        tableNode = node;
+        tablePos = $from.before(d);
+        break;
+      }
+    }
+
+    if (tableNode && tablePos >= 0) {
+      this.editor
+        ?.chain()
+        .focus()
+        .insertContentAt(tablePos + tableNode.nodeSize, tableNode.toJSON())
+        .run();
+    }
+    this.closeTableDropdown();
+  }
+
+  toggleHeaderRow(): void {
+    this.editor?.chain().focus().toggleHeaderRow().run();
+    this.closeTableDropdown();
+  }
+
+  addRowBefore(): void {
+    this.editor?.chain().focus().addRowBefore().run();
+    this.closeTableDropdown();
+  }
+
+  addRowAfter(): void {
+    this.editor?.chain().focus().addRowAfter().run();
+    this.closeTableDropdown();
+  }
+
+  deleteRow(): void {
+    this.editor?.chain().focus().deleteRow().run();
+    this.closeTableDropdown();
+  }
+
+  addColumnBefore(): void {
+    this.editor?.chain().focus().addColumnBefore().run();
+    this.closeTableDropdown();
+  }
+
+  addColumnAfter(): void {
+    this.editor?.chain().focus().addColumnAfter().run();
+    this.closeTableDropdown();
+  }
+
+  deleteColumn(): void {
+    this.editor?.chain().focus().deleteColumn().run();
+    this.closeTableDropdown();
+  }
+
+  mergeCells(): void {
+    this.editor?.chain().focus().mergeCells().run();
+    this.closeTableDropdown();
+  }
+
+  splitCell(): void {
+    this.editor?.chain().focus().splitCell().run();
+    this.closeTableDropdown();
+  }
+
+  toggleTableCellAlignDropdown(): void {
+    this.showTableCellAlignDropdown = !this.showTableCellAlignDropdown;
+  }
+
+  closeTableCellAlignDropdown(): void {
+    this.showTableCellAlignDropdown = false;
+  }
+
+  setCellVerticalAlign(align: 'top' | 'middle' | 'bottom'): void {
+    const alignValue = align === 'top' ? 'top' : align === 'middle' ? 'middle' : 'bottom';
+    this.editor?.chain().focus().setCellAttribute('verticalAlign', alignValue).run();
+    this.closeTableCellAlignDropdown();
+  }
+
+  toggleTableCellBackgroundDropdown(): void {
+    this.showTableCellBackgroundDropdown = !this.showTableCellBackgroundDropdown;
+  }
+
+  closeTableCellBackgroundDropdown(): void {
+    this.showTableCellBackgroundDropdown = false;
+  }
+
+  setCellBackground(color: string): void {
+    this.editor?.chain().focus().setCellAttribute('backgroundColor', color).run();
+    this.currentTableCellBackground = color;
+  }
+
+  setCellBackgroundFromPicker(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const color = input.value;
+    this.setCellBackground(color);
+  }
+
+  selectCellBackground(color: string): void {
+    this.setCellBackground(color);
+    this.closeTableCellBackgroundDropdown();
+  }
+
+  removeCellBackground(): void {
+    this.editor?.chain().focus().setCellAttribute('backgroundColor', null).run();
+    this.closeTableCellBackgroundDropdown();
+  }
+
+  addTableCaption(): void {
+    const { state } = this.editor!;
+    const { selection } = state;
+    const { $from } = selection;
+    
+    // Find the table node
+    let tablePos = -1;
+    
+    for (let d = $from.depth; d > 0; d--) {
+      const node = $from.node(d);
+      if (node.type.name === 'table') {
+        tablePos = $from.before(d);
+        break;
+      }
+    }
+
+    if (tablePos >= 0) {
+      const captionText = prompt('Digite o texto da legenda:');
+      if (captionText) {
+        // Insert caption at the beginning of the table
+        const captionPos = this.captionPosition === 'top' ? tablePos + 1 : tablePos;
+        this.editor
+          ?.chain()
+          .focus()
+          .insertContentAt(captionPos, {
+            type: 'tableCaption',
+            content: [{ type: 'text', text: captionText }],
+          })
+          .run();
+      }
+    }
+    this.closeTableDropdown();
+  }
+
+  toggleCaptionPosition(): void {
+    this.captionPosition = this.captionPosition === 'top' ? 'bottom' : 'top';
+    // Note: Moving caption requires more complex logic with ProseMirror
+    // For now, we'll just toggle the state
+    this.closeTableDropdown();
   }
 
   // Link simples (abre prompt por enquanto)

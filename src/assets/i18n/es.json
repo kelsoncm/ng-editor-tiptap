@@ -52,7 +52,32 @@
       "textColor": "Color del texto",
       "highlightColor": "Color de resaltado",
       "removeHighlight": "Eliminar resaltado",
-      "customColor": "Color personalizado"
+      "customColor": "Color personalizado",
+      "table": "Tabla"
+    },
+    "table": {
+      "insert": "Insertar tabla",
+      "delete": "Eliminar tabla",
+      "duplicate": "Duplicar tabla",
+      "addCaption": "Agregar leyenda",
+      "captionPosition": "Posición de la leyenda",
+      "toggleHeader": "Alternar fila de encabezado",
+      "addRowBefore": "Insertar fila arriba",
+      "addRowAfter": "Insertar fila abajo",
+      "deleteRow": "Eliminar fila",
+      "selectRow": "Seleccionar fila",
+      "addColumnBefore": "Insertar columna a la izquierda",
+      "addColumnAfter": "Insertar columna a la derecha",
+      "deleteColumn": "Eliminar columna",
+      "selectColumn": "Seleccionar columna",
+      "mergeCells": "Combinar celdas",
+      "splitCell": "Dividir celda",
+      "cellAlign": "Alineación vertical",
+      "alignTop": "Alinear arriba",
+      "alignMiddle": "Alinear en el medio",
+      "alignBottom": "Alinear abajo",
+      "cellBackground": "Color de fondo de celda",
+      "removeBackground": "Eliminar color de fondo"
     },
     "blocks": {
       "paragraph": "Párrafo",
