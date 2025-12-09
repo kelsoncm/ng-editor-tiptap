@@ -99,11 +99,13 @@ export class EditorComponent
   showTextColorDropdown = false;
   showHighlightColorDropdown = false;
   showTextAlignDropdown = false;
+  showInsertDropdown = false;
   showTableDropdown = false;
   showTableCellAlignDropdown = false;
   showTableCellBackgroundDropdown = false;
   showBalloonMenu = false;
   balloonMenuPosition = { top: '0px', left: '0px' };
+  isInTable = false;
   currentBlockType: string = 'fas fa-paragraph';
   currentLineHeight: string = 'normal';
   currentFontFamily: string = 'Default';
@@ -450,6 +452,7 @@ export class EditorComponent
         this.showTextColorDropdown = false;
         this.showHighlightColorDropdown = false;
         this.showTextAlignDropdown = false;
+        this.showInsertDropdown = false;
       }
     });
   }
@@ -707,6 +710,15 @@ export class EditorComponent
 
   closeTextAlignDropdown(): void {
     this.showTextAlignDropdown = false;
+  }
+
+  // Insert dropdown methods
+  toggleInsertDropdown(): void {
+    this.showInsertDropdown = !this.showInsertDropdown;
+  }
+
+  closeInsertDropdown(): void {
+    this.showInsertDropdown = false;
   }
 
   setTextAlign(align: 'left' | 'center' | 'right' | 'justify'): void {
@@ -1026,31 +1038,48 @@ export class EditorComponent
   }
 
   private updateBalloonMenuPosition(): void {
-    // Verifica se o balloon menu está habilitado
-    if (!this.enableBalloonMenu) {
-      this.showBalloonMenu = false;
-      return;
-    }
-
-    // Verifica se há seleção de texto
+    // Verifica se há seleção de texto ou se está dentro de uma tabela
     const { from, to } = this.editor!.state.selection;
     const isEmpty = from === to;
+    
+    // Verifica se o cursor está dentro de uma tabela
+    const isInsideTable = this.editor?.isActive('table') || false;
+    this.isInTable = isInsideTable;
 
-    if (isEmpty) {
+    // Mostra o balloon se houver seleção OU se estiver dentro de uma tabela (e enableTable estiver ativo)
+    const shouldShow = (!isEmpty && this.enableBalloonMenu) || (isInsideTable && this.enableTable);
+
+    if (!shouldShow) {
       this.showBalloonMenu = false;
       return;
     }
 
-    // Obtém as coordenadas da seleção
+    // Obtém as coordenadas da seleção ou do cursor
     setTimeout(() => {
       const selection = window.getSelection();
       if (selection && selection.rangeCount > 0) {
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
         
-        // Posiciona o menu acima da seleção
-        const top = rect.top - 10;
-        const left = rect.left + rect.width / 2;
+        // Posiciona o menu abaixo da seleção/cursor
+        const top = rect.bottom + 60;
+        let left = rect.left + rect.width / 2;
+
+        // Ajusta a posição horizontal para evitar que o menu seja cortado
+        // Estima a largura do balloon menu (aproximadamente 400px para tabelas, 300px para texto)
+        const estimatedMenuWidth = isInsideTable ? 400 : 300;
+        const viewportWidth = window.innerWidth;
+        const menuHalfWidth = estimatedMenuWidth / 2;
+
+        // Garante que o menu não ultrapasse a borda esquerda
+        if (left - menuHalfWidth < 10) {
+          left = menuHalfWidth + 10;
+        }
+        
+        // Garante que o menu não ultrapasse a borda direita
+        if (left + menuHalfWidth > viewportWidth - 10) {
+          left = viewportWidth - menuHalfWidth - 10;
+        }
 
         this.balloonMenuPosition = {
           top: `${top}px`,

@@ -4,6 +4,7 @@
 
 .toolbar {
   display: flex;
+  flex-wrap: wrap;
   gap: 0;
   margin-bottom: 12px;
   align-items: center;
@@ -174,6 +175,49 @@
     &:focus-visible {
       outline: 2px solid #0050a4;
       outline-offset: -2px;
+    }
+  }
+
+  .dropdown-button-group {
+    display: flex;
+    gap: 0;
+    padding: 8px;
+    justify-content: center;
+
+    .dropdown-button {
+      padding: 8px 12px;
+      border: 1px solid #d0d0d0;
+      background: white;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: #1f1f1f;
+      transition: background-color 0.2s ease;
+      margin-right: -1px;
+
+      &:first-child {
+        border-radius: 4px 0 0 4px;
+      }
+
+      &:last-child {
+        border-radius: 0 4px 4px 0;
+        margin-right: 0;
+      }
+
+      &:hover {
+        background-color: #f0f0f0;
+        border-color: #b8b8b8;
+        z-index: 1;
+      }
+
+      &:active {
+        background-color: #e0e0e0;
+      }
+
+      &:focus-visible {
+        outline: 2px solid #0050a4;
+        outline-offset: -2px;
+        z-index: 2;
+      }
     }
   }
 
@@ -365,6 +409,7 @@
 .balloon-menu {
   position: fixed;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0;
   padding: 6px;
@@ -373,35 +418,37 @@
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 1001;
-  transform: translate(-50%, -100%);
+  transform: translateX(-50%);
   margin-top: -8px;
   animation: fadeIn 0.2s ease-out;
+  max-width: 90vw;
+  justify-content: center;
 
-  &::before {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 6px solid #ffffff;
-  }
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   bottom: -8px;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  //   width: 0;
+  //   height: 0;
+  //   border-left: 7px solid transparent;
+  //   border-right: 7px solid transparent;
+  //   border-top: 7px solid #d0d0d0;
+  // }
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-top: 7px solid #d0d0d0;
-  }
+  // &::after {
+  //   content: '';
+  //   position: absolute;
+  //   bottom: -6px;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  //   width: 0;
+  //   height: 0;
+  //   border-left: 6px solid transparent;
+  //   border-right: 6px solid transparent;
+  //   border-top: 6px solid #ffffff;
+  // }
 }
 
 .balloon-button {
