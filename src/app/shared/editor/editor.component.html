@@ -19,7 +19,7 @@
     <div class="toolbar-group">
       <!-- blocos dropdown -->
       <div class="toolbar-dropdown">
-        <button type="button" (click)="toggleBlocksDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.blockTypes' | translate">
+        <button type="button" (click)="toggleBlocksDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.blockTypes' | translate" style="margin-top: 6px;">
           <i [ngClass]="currentBlockType"></i>
         </button>
         <div class="dropdown-menu" *ngIf="showBlocksDropdown" (click)="$event.stopPropagation()">
@@ -50,6 +50,27 @@
           </button>
           <button type="button" (click)="selectBlockType('code-block')" class="dropdown-item">
             <i class="fas fa-code"></i> {{ 'editor.blocks.codeBlock' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- text align dropdown -->
+      <div class="toolbar-dropdown">
+        <button type="button" (click)="toggleTextAlignDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.textAlign' | translate"style="margin-top: 6px;">
+          <i [ngClass]="getTextAlignIcon()"></i>
+        </button>
+        <div class="dropdown-menu" *ngIf="showTextAlignDropdown" (click)="$event.stopPropagation()">
+          <button type="button" (click)="setTextAlign('left')" class="dropdown-item">
+            <i class="fas fa-align-left"></i> {{ 'editor.toolbar.alignLeft' | translate }}
+          </button>
+          <button type="button" (click)="setTextAlign('center')" class="dropdown-item">
+            <i class="fas fa-align-center"></i> {{ 'editor.toolbar.alignCenter' | translate }}
+          </button>
+          <button type="button" (click)="setTextAlign('right')" class="dropdown-item">
+            <i class="fas fa-align-right"></i> {{ 'editor.toolbar.alignRight' | translate }}
+          </button>
+          <button type="button" (click)="setTextAlign('justify')" class="dropdown-item">
+            <i class="fas fa-align-justify"></i> {{ 'editor.toolbar.alignJustify' | translate }}
           </button>
         </div>
       </div>
@@ -281,29 +302,6 @@
           </button>
           <button type="button" (click)="insertTable(); closeInsertDropdown()" class="dropdown-item" *ngIf="enableTable">
             <i class="fas fa-table"></i> {{ 'editor.toolbar.insertTable' | translate }}
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="toolbar-group" *ngIf="enableTextAlign">
-      <!-- text align dropdown -->
-      <div class="toolbar-dropdown">
-        <button type="button" (click)="toggleTextAlignDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.textAlign' | translate">
-          <i [ngClass]="getTextAlignIcon()"></i>
-        </button>
-        <div class="dropdown-menu" *ngIf="showTextAlignDropdown" (click)="$event.stopPropagation()">
-          <button type="button" (click)="setTextAlign('left')" class="dropdown-item">
-            <i class="fas fa-align-left"></i> {{ 'editor.toolbar.alignLeft' | translate }}
-          </button>
-          <button type="button" (click)="setTextAlign('center')" class="dropdown-item">
-            <i class="fas fa-align-center"></i> {{ 'editor.toolbar.alignCenter' | translate }}
-          </button>
-          <button type="button" (click)="setTextAlign('right')" class="dropdown-item">
-            <i class="fas fa-align-right"></i> {{ 'editor.toolbar.alignRight' | translate }}
-          </button>
-          <button type="button" (click)="setTextAlign('justify')" class="dropdown-item">
-            <i class="fas fa-align-justify"></i> {{ 'editor.toolbar.alignJustify' | translate }}
           </button>
         </div>
       </div>
