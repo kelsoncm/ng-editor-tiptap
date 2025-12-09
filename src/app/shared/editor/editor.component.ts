@@ -37,6 +37,8 @@ import { LineHeight } from './extensions/line-height';
 import { FontSize } from './extensions/font-size';
 import { TableCaption } from './extensions/table-caption';
 import { Indent } from './extensions/indent';
+import { CustomOrderedList, OrderedListType } from './extensions/ordered-list';
+import { CustomBulletList, BulletListType } from './extensions/bullet-list';
 
 @Component({
   selector: 'app-editor',
@@ -112,6 +114,8 @@ export class EditorComponent
   showTableDropdown = false;
   showTableCellAlignDropdown = false;
   showTableCellBackgroundDropdown = false;
+  showOrderedListTypeDropdown = false;
+  showBulletListTypeDropdown = false;
   showBalloonMenu = false;
   balloonMenuPosition = { top: '0px', left: '0px' };
   isInTable = false;
@@ -123,6 +127,8 @@ export class EditorComponent
   currentHighlightColor: string = '#ffff00';
   currentTextAlign: string = 'left';
   currentTableCellBackground: string = '#ffffff';
+  currentOrderedListType: OrderedListType = 'decimal';
+  currentBulletListType: BulletListType = 'disc';
   captionPosition: 'top' | 'bottom' = 'top';
 
   // Counters for footer
@@ -183,6 +189,25 @@ export class EditorComponent
     { value: '#E6E6FA', label: 'Lavanda' },
     { value: '#F0E68C', label: 'Khaki' },
   ];
+
+  orderedListTypes: { value: OrderedListType; labelKey: string; icon: string }[] = [
+    { value: 'decimal', labelKey: 'editor.orderedListTypes.decimal', icon: '1.' },
+    { value: 'decimal-leading-zero', labelKey: 'editor.orderedListTypes.decimalLeadingZero', icon: '01.' },
+    { value: 'lower-alpha', labelKey: 'editor.orderedListTypes.lowerAlpha', icon: 'a.' },
+    { value: 'upper-alpha', labelKey: 'editor.orderedListTypes.upperAlpha', icon: 'A.' },
+    { value: 'lower-roman', labelKey: 'editor.orderedListTypes.lowerRoman', icon: 'i.' },
+    { value: 'upper-roman', labelKey: 'editor.orderedListTypes.upperRoman', icon: 'I.' },
+  ];
+
+  bulletListTypes: { value: BulletListType; labelKey: string; icon: string }[] = [
+    { value: 'disc', labelKey: 'editor.bulletListTypes.disc', icon: '●' },
+    { value: 'circle', labelKey: 'editor.bulletListTypes.circle', icon: '○' },
+    { value: 'square', labelKey: 'editor.bulletListTypes.square', icon: '■' },
+    { value: '"\\2714"', labelKey: 'editor.bulletListTypes.check', icon: '✔' },
+    { value: '"\\2705"', labelKey: 'editor.bulletListTypes.checkmark', icon: '✅' },
+    { value: '"\\2610"', labelKey: 'editor.bulletListTypes.checkbox', icon: '☐' },
+  ];
+
   private editor!: Editor;
 
   // ControlValueAccessor
@@ -207,7 +232,11 @@ export class EditorComponent
         italic: this.enableItalic ? {} : false,
         strike: this.enableStrike ? {} : false,
         code: this.enableCode ? {} : false,
+        orderedList: false, // Disable default OrderedList
+        bulletList: false, // Disable default BulletList
       }),
+      CustomOrderedList, // Use custom OrderedList
+      CustomBulletList, // Use custom BulletList
     ];
 
     // Add Subscript extension
@@ -526,10 +555,106 @@ export class EditorComponent
 
   toggleBulletList(): void {
     this.editor?.chain().focus().toggleBulletList().run();
+    // After creating the list, set its type
+    setTimeout(() => {
+      this.editor?.chain().focus().setBulletListType(this.currentBulletListType).run();
+    }, 0);
+  }
+
+  toggleBulletListTypeDropdown(): void {
+    this.showBulletListTypeDropdown = !this.showBulletListTypeDropdown;
+  }
+
+  closeBulletListTypeDropdown(): void {
+    this.showBulletListTypeDropdown = false;
+  }
+
+  applyBulletListType(listType: BulletListType): void {
+    this.currentBulletListType = listType;
+    
+    // Check if we're already in a bullet list
+    const isInBulletList = this.editor?.isActive('bulletList');
+    
+    if (!isInBulletList) {
+      // Create new bullet list
+      this.editor?.chain().focus().toggleBulletList().run();
+    }
+    
+    // Set the list type
+    setTimeout(() => {
+      this.editor?.chain().focus().setBulletListType(listType).run();
+    }, 0);
+    
+    this.closeBulletListTypeDropdown();
+  }
+
+  removeBulletList(): void {
+    this.editor?.chain().focus().toggleBulletList().run();
+    this.closeBulletListTypeDropdown();
+  }
+
+  isInBulletList(): boolean {
+    return this.editor?.isActive('bulletList') ?? false;
+  }
+
+  getBulletListTypeIcon(): string {
+    const type = this.bulletListTypes.find(t => t.value === this.currentBulletListType);
+    return type ? type.icon : '●';
   }
 
   toggleOrderedList(): void {
     this.editor?.chain().focus().toggleOrderedList().run();
+    // After creating the list, set its type
+    setTimeout(() => {
+      this.editor?.chain().focus().setOrderedListType(this.currentOrderedListType).run();
+    }, 0);
+  }
+
+  toggleOrderedListTypeDropdown(): void {
+    this.showOrderedListTypeDropdown = !this.showOrderedListTypeDropdown;
+  }
+
+  closeOrderedListTypeDropdown(): void {
+    this.showOrderedListTypeDropdown = false;
+  }
+
+  applyOrderedListType(listType: OrderedListType): void {
+    this.currentOrderedListType = listType;
+    
+    // Check if we're already in an ordered list
+    const isInOrderedList = this.editor?.isActive('orderedList');
+    
+    if (!isInOrderedList) {
+      // Create new ordered list
+      this.editor?.chain().focus().toggleOrderedList().run();
+    }
+    
+    // Set the list type
+    setTimeout(() => {
+      this.editor?.chain().focus().setOrderedListType(listType).run();
+    }, 0);
+    
+    this.closeOrderedListTypeDropdown();
+  }
+
+  removeOrderedList(): void {
+    this.editor?.chain().focus().toggleOrderedList().run();
+    this.closeOrderedListTypeDropdown();
+  }
+
+  isInOrderedList(): boolean {
+    return this.editor?.isActive('orderedList') ?? false;
+  }
+
+  setOrderedListType(listType: OrderedListType): void {
+    this.currentOrderedListType = listType;
+    this.editor?.chain().focus().setOrderedListType(listType).run();
+    this.closeOrderedListTypeDropdown();
+  }
+
+  getOrderedListTypeIcon(): string {
+    const type = this.orderedListTypes.find(t => t.value === this.currentOrderedListType);
+    return type ? type.icon : '1.';
   }
 
   indent(): void {

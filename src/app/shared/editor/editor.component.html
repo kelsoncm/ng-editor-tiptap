@@ -20,7 +20,7 @@
       <!-- blocos dropdown -->
       <div class="toolbar-dropdown">
         <button type="button" (click)="toggleBlocksDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.blockTypes' | translate">
-          <i [ngClass]="currentBlockType"></i> <i class="fas fa-chevron-down"></i>
+          <i [ngClass]="currentBlockType"></i>
         </button>
         <div class="dropdown-menu" *ngIf="showBlocksDropdown" (click)="$event.stopPropagation()">
           <button type="button" (click)="selectBlockType('paragraph')" class="dropdown-item">
@@ -55,8 +55,63 @@
       </div>
 
       <!-- listas -->
-      <button type="button" (click)="toggleBulletList()" [title]="'editor.toolbar.bulletList' | translate"><i class="fas fa-list-ul"></i></button>
-      <button type="button" (click)="toggleOrderedList()" [title]="'editor.toolbar.orderedList' | translate"><i class="fas fa-list-ol"></i></button>
+      <!-- bullet list with dropdown -->
+      <div class="toolbar-dropdown">
+        <button type="button" (click)="toggleBulletListTypeDropdown()" class="dropdown-trigger list-type-button" [title]="'editor.toolbar.bulletList' | translate">
+          <span class="list-type-icon">{{ getBulletListTypeIcon() }}</span>
+        </button>
+        <div class="dropdown-menu list-type-grid-menu" *ngIf="showBulletListTypeDropdown" (click)="$event.stopPropagation()">
+          <div class="list-type-grid bullet-list-grid">
+            <button type="button" 
+                    *ngFor="let type of bulletListTypes" 
+                    (click)="applyBulletListType(type.value)" 
+                    [class.active]="currentBulletListType === type.value"
+                    [title]="type.labelKey | translate"
+                    class="list-type-grid-item"
+                    >
+              <span class="list-type-preview-large">{{ type.icon }}</span>
+            </button>
+          </div>
+          <ng-container *ngIf="isInBulletList()">
+            <hr class="dropdown-divider" />
+            <button type="button" 
+                    (click)="removeBulletList()"
+                    [title]="'editor.bulletListTypes.remove' | translate" 
+                    class="dropdown-item"
+                    style="white-space: nowrap;">
+              <i class="fas fa-times-circle list-remove-icon"></i> {{ 'editor.bulletListTypes.remove' | translate }}
+            </button>
+          </ng-container>
+        </div>
+      </div>
+      
+      <!-- ordered list with dropdown -->
+      <div class="toolbar-dropdown">
+        <button type="button" (click)="toggleOrderedListTypeDropdown()" class="dropdown-trigger list-type-button" [title]="'editor.toolbar.orderedList' | translate">
+          <span class="list-type-icon">{{ getOrderedListTypeIcon() }}</span>
+        </button>
+        <div class="dropdown-menu list-type-grid-menu" *ngIf="showOrderedListTypeDropdown" (click)="$event.stopPropagation()">
+          <div class="list-type-grid">
+            <button type="button" 
+                    *ngFor="let type of orderedListTypes" 
+                    (click)="applyOrderedListType(type.value)" 
+                    class="list-type-grid-item"
+                    [class.active]="currentOrderedListType === type.value"
+                    [title]="type.labelKey | translate">
+              <span class="list-type-preview-large">{{ type.icon }}</span>
+            </button>
+          </div>
+          <ng-container *ngIf="isInOrderedList()">
+            <hr class="dropdown-divider" />
+            <button type="button" 
+                    (click)="removeOrderedList()" 
+                    class="dropdown-item"
+                    [title]="'editor.orderedListTypes.remove' | translate">
+              <i class="fas fa-times-circle list-remove-icon"></i> {{ 'editor.orderedListTypes.remove' | translate }}
+            </button>
+          </ng-container>
+        </div>
+      </div>
       
       <!-- indent / outdent -->
       <button type="button" (click)="indent()" [title]="'editor.toolbar.indent' | translate"><i class="fas fa-indent"></i></button>
@@ -71,7 +126,7 @@
       <!-- text formatting dropdown -->
       <div class="toolbar-dropdown">
         <button type="button" (click)="toggleTextFormattingDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.textFormatting' | translate">
-          <i class="fas fa-font"></i> <i class="fas fa-chevron-down"></i>
+          <i class="fas fa-font"></i>
         </button>
         <div class="dropdown-menu" *ngIf="showTextFormattingDropdown" (click)="$event.stopPropagation()">
           <!-- Inline formatting buttons in a single row -->
@@ -94,113 +149,114 @@
           </div>
           
           <hr class="dropdown-divider" *ngIf="enableLineHeight || enableFontFamily || enableFontSize || enableTextColor || enableHighlight" />
-          
-          <!-- line height nested dropdown -->
-          <div class="toolbar-dropdown nested-dropdown" *ngIf="enableLineHeight">
-            <button type="button" (click)="toggleLineHeightDropdown()" class="dropdown-item">
-              <i class="fas fa-arrows-alt-v"></i> {{ 'editor.toolbar.lineHeight' | translate }}: {{ getLineHeightLabel() }} <i class="fas fa-chevron-right"></i>
-            </button>
-            <div class="dropdown-menu nested-menu" *ngIf="showLineHeightDropdown" (click)="$event.stopPropagation()">
-              <button type="button" (click)="setLineHeight('normal')" class="dropdown-item">
-                <i class="fas fa-check" [style.visibility]="currentLineHeight === 'normal' ? 'visible' : 'hidden'"></i> {{ 'editor.lineHeight.simple' | translate }}
+          <div class="toolbar-fontItems" >
+            <!-- line height nested dropdown -->
+            <div class="toolbar-dropdown nested-dropdown" *ngIf="enableLineHeight">
+              <button type="button" (click)="toggleLineHeightDropdown()" class="dropdown-item">
+                <i class="fas fa-arrows-alt-v"></i> {{ getLineHeightLabel() }}
               </button>
-              <button type="button" (click)="setLineHeight('1.15')" class="dropdown-item">
-                <i class="fas fa-check" [style.visibility]="currentLineHeight === '1.15' ? 'visible' : 'hidden'"></i> 1.15
-              </button>
-              <button type="button" (click)="setLineHeight('1.5')" class="dropdown-item">
-                <i class="fas fa-check" [style.visibility]="currentLineHeight === '1.5' ? 'visible' : 'hidden'"></i> 1.5
-              </button>
-              <button type="button" (click)="setLineHeight('2')" class="dropdown-item">
-                <i class="fas fa-check" [style.visibility]="currentLineHeight === '2' ? 'visible' : 'hidden'"></i> {{ 'editor.lineHeight.double' | translate }}
-              </button>
-            </div>
-          </div>
-          
-          <!-- font family nested dropdown -->
-          <div class="toolbar-dropdown nested-dropdown" *ngIf="enableFontFamily">
-            <button type="button" (click)="toggleFontFamilyDropdown()" class="dropdown-item">
-              <i class="fas fa-font"></i> {{ 'editor.toolbar.fontFamily' | translate }}: {{ getFontFamilyLabel() }} <i class="fas fa-chevron-right"></i>
-            </button>
-            <div class="dropdown-menu nested-menu" *ngIf="showFontFamilyDropdown" (click)="$event.stopPropagation()">
-              <button 
-                type="button" 
-                *ngFor="let font of fontFamilies" 
-                (click)="setFontFamily(font.value)" 
-                class="dropdown-item"
-                [style.font-family]="font.value !== 'Default' ? font.value : 'inherit'">
-                <i class="fas fa-check" [style.visibility]="currentFontFamily === font.value ? 'visible' : 'hidden'"></i> {{ font.label }}
-              </button>
-            </div>
-          </div>
-
-          <!-- font size nested dropdown -->
-          <div class="toolbar-dropdown nested-dropdown" *ngIf="enableFontSize">
-            <button type="button" (click)="toggleFontSizeDropdown()" class="dropdown-item">
-              <i class="fas fa-text-height"></i> {{ 'editor.toolbar.fontSize' | translate }}: {{ getFontSizeLabel() }} <i class="fas fa-chevron-right"></i>
-            </button>
-            <div class="dropdown-menu nested-menu" *ngIf="showFontSizeDropdown" (click)="$event.stopPropagation()">
-              <button 
-                type="button" 
-                *ngFor="let size of fontSizes" 
-                (click)="setFontSize(size.value)" 
-                class="dropdown-item">
-                <i class="fas fa-check" [style.visibility]="currentFontSize === size.value ? 'visible' : 'hidden'"></i> {{ size.label }}
-              </button>
-            </div>
-          </div>
-
-          <!-- text color nested dropdown -->
-          <div class="toolbar-dropdown nested-dropdown" *ngIf="enableTextColor">
-            <button type="button" (click)="toggleTextColorDropdown()" class="dropdown-item">
-              <i class="fas fa-palette"></i> {{ 'editor.toolbar.textColor' | translate }} <i class="fas fa-chevron-right"></i>
-            </button>
-            <div class="dropdown-menu nested-menu color-dropdown-menu" *ngIf="showTextColorDropdown" (click)="$event.stopPropagation()">
-              <div class="color-grid">
-                <button 
-                  type="button"
-                  *ngFor="let color of textColors"
-                  class="color-option"
-                  [style.background-color]="color.value"
-                  [title]="color.label"
-                  (click)="selectTextColor(color.value)">
-                  <i class="fas fa-check" *ngIf="currentTextColor === color.value"></i>
+              <div class="dropdown-menu nested-menu" *ngIf="showLineHeightDropdown" (click)="$event.stopPropagation()">
+                <button type="button" (click)="setLineHeight('normal')" class="dropdown-item">
+                  <i class="fas fa-check" [style.visibility]="currentLineHeight === 'normal' ? 'visible' : 'hidden'"></i> {{ 'editor.lineHeight.simple' | translate }}
+                </button>
+                <button type="button" (click)="setLineHeight('1.15')" class="dropdown-item">
+                  <i class="fas fa-check" [style.visibility]="currentLineHeight === '1.15' ? 'visible' : 'hidden'"></i> 1.15
+                </button>
+                <button type="button" (click)="setLineHeight('1.5')" class="dropdown-item">
+                  <i class="fas fa-check" [style.visibility]="currentLineHeight === '1.5' ? 'visible' : 'hidden'"></i> 1.5
+                </button>
+                <button type="button" (click)="setLineHeight('2')" class="dropdown-item">
+                  <i class="fas fa-check" [style.visibility]="currentLineHeight === '2' ? 'visible' : 'hidden'"></i> {{ 'editor.lineHeight.double' | translate }}
                 </button>
               </div>
-              <div class="color-picker-wrapper">
-                <label class="custom-color-label">
-                  {{ 'editor.toolbar.customColor' | translate }}
-                  <input type="color" [value]="currentTextColor" (change)="setTextColorFromPicker($event)" class="color-input-small">
-                </label>
-              </div>
             </div>
-          </div>
-
-          <!-- highlight color nested dropdown -->
-          <div class="toolbar-dropdown nested-dropdown" *ngIf="enableHighlight">
-            <button type="button" (click)="toggleHighlightColorDropdown()" class="dropdown-item">
-              <i class="fas fa-highlighter"></i> {{ 'editor.toolbar.highlightColor' | translate }} <i class="fas fa-chevron-right"></i>
-            </button>
-            <div class="dropdown-menu nested-menu color-dropdown-menu" *ngIf="showHighlightColorDropdown" (click)="$event.stopPropagation()">
-              <div class="color-grid">
+            
+            <!-- font family nested dropdown -->
+            <div class="toolbar-dropdown nested-dropdown" *ngIf="enableFontFamily">
+              <button type="button" (click)="toggleFontFamilyDropdown()" class="dropdown-item">
+                <i class="fas fa-font"></i>{{ getFontFamilyLabel() }}
+              </button>
+              <div class="dropdown-menu nested-menu" *ngIf="showFontFamilyDropdown" (click)="$event.stopPropagation()">
                 <button 
-                  type="button"
-                  *ngFor="let color of highlightColors"
-                  class="color-option"
-                  [style.background-color]="color.value"
-                  [title]="color.label"
-                  (click)="selectHighlightColor(color.value)">
-                  <i class="fas fa-check" *ngIf="currentHighlightColor === color.value"></i>
+                  type="button" 
+                  *ngFor="let font of fontFamilies" 
+                  (click)="setFontFamily(font.value)" 
+                  class="dropdown-item"
+                  [style.font-family]="font.value !== 'Default' ? font.value : 'inherit'">
+                  <i class="fas fa-check" [style.visibility]="currentFontFamily === font.value ? 'visible' : 'hidden'"></i> {{ font.label }}
                 </button>
               </div>
-              <div class="color-picker-wrapper">
-                <label class="custom-color-label">
-                  {{ 'editor.toolbar.customColor' | translate }}
-                  <input type="color" [value]="currentHighlightColor" (change)="setHighlightColorFromPicker($event)" class="color-input-small">
-                </label>
-              </div>
-              <button type="button" (click)="removeHighlight(); closeTextFormattingDropdown()" class="dropdown-item">
-                <i class="fas fa-times"></i> {{ 'editor.toolbar.removeHighlight' | translate }}
+            </div>
+
+            <!-- font size nested dropdown -->
+            <div class="toolbar-dropdown nested-dropdown" *ngIf="enableFontSize">
+              <button type="button" (click)="toggleFontSizeDropdown()" class="dropdown-item">
+                <i class="fas fa-text-height"></i> {{ getFontSizeLabel() }}
               </button>
+              <div class="dropdown-menu nested-menu" *ngIf="showFontSizeDropdown" (click)="$event.stopPropagation()">
+                <button 
+                  type="button" 
+                  *ngFor="let size of fontSizes" 
+                  (click)="setFontSize(size.value)" 
+                  class="dropdown-item">
+                  <i class="fas fa-check" [style.visibility]="currentFontSize === size.value ? 'visible' : 'hidden'"></i> {{ size.label }}
+                </button>
+              </div>
+            </div>
+
+            <!-- text color nested dropdown -->
+            <div class="toolbar-dropdown nested-dropdown" *ngIf="enableTextColor">
+              <button type="button" (click)="toggleTextColorDropdown()" class="dropdown-item">
+                <i class="fas fa-palette"></i> {{ 'editor.toolbar.textColor' | translate }} 
+              </button>
+              <div class="dropdown-menu nested-menu color-dropdown-menu" *ngIf="showTextColorDropdown" (click)="$event.stopPropagation()">
+                <div class="color-grid">
+                  <button 
+                    type="button"
+                    *ngFor="let color of textColors"
+                    class="color-option"
+                    [style.background-color]="color.value"
+                    [title]="color.label"
+                    (click)="selectTextColor(color.value)">
+                    <i class="fas fa-check" *ngIf="currentTextColor === color.value"></i>
+                  </button>
+                </div>
+                <div class="color-picker-wrapper">
+                  <label class="custom-color-label">
+                    {{ 'editor.toolbar.customColor' | translate }}
+                    <input type="color" [value]="currentTextColor" (change)="setTextColorFromPicker($event)" class="color-input-small">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- highlight color nested dropdown -->
+            <div class="toolbar-dropdown nested-dropdown" *ngIf="enableHighlight">
+              <button type="button" (click)="toggleHighlightColorDropdown()" class="dropdown-item">
+                <i class="fas fa-highlighter"></i> {{ 'editor.toolbar.highlightColor' | translate }} 
+              </button>
+              <div class="dropdown-menu nested-menu color-dropdown-menu" *ngIf="showHighlightColorDropdown" (click)="$event.stopPropagation()">
+                <div class="color-grid">
+                  <button 
+                    type="button"
+                    *ngFor="let color of highlightColors"
+                    class="color-option"
+                    [style.background-color]="color.value"
+                    [title]="color.label"
+                    (click)="selectHighlightColor(color.value)">
+                    <i class="fas fa-check" *ngIf="currentHighlightColor === color.value"></i>
+                  </button>
+                </div>
+                <div class="color-picker-wrapper">
+                  <label class="custom-color-label">
+                    {{ 'editor.toolbar.customColor' | translate }}
+                    <input type="color" [value]="currentHighlightColor" (change)="setHighlightColorFromPicker($event)" class="color-input-small">
+                  </label>
+                </div>
+                <button type="button" (click)="removeHighlight(); closeTextFormattingDropdown()" class="dropdown-item">
+                  <i class="fas fa-times"></i> {{ 'editor.toolbar.removeHighlight' | translate }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -234,7 +290,7 @@
       <!-- text align dropdown -->
       <div class="toolbar-dropdown">
         <button type="button" (click)="toggleTextAlignDropdown()" class="dropdown-trigger" [title]="'editor.toolbar.textAlign' | translate">
-          <i [ngClass]="getTextAlignIcon()"></i> <i class="fas fa-chevron-down"></i>
+          <i [ngClass]="getTextAlignIcon()"></i>
         </button>
         <div class="dropdown-menu" *ngIf="showTextAlignDropdown" (click)="$event.stopPropagation()">
           <button type="button" (click)="setTextAlign('left')" class="dropdown-item">

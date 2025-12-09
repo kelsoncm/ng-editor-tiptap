@@ -179,6 +179,10 @@
     }
   }
 
+  .toolbar-fontItems > div {
+    display: block;
+  }
+
   .dropdown-button-group {
     display: flex;
     gap: 0;
@@ -874,3 +878,192 @@
     }
   }
 }
+
+// Dropdown trigger mini for ordered list types
+.dropdown-trigger-mini {
+  padding: 8px 8px !important;
+  border: 1px solid #d0d0d0;
+  background-color: #ffffff;
+  border-radius: 0 4px 4px 0 !important;
+  cursor: pointer;
+  font-size: 0.75rem !important;
+  color: #1f1f1f;
+  transition: all 0.2s ease;
+  margin-left: -1px !important;
+
+  &:hover {
+    background-color: #f0f0f0;
+    border-color: #b8b8b8;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0050a4;
+    outline-offset: 2px;
+    z-index: 2;
+  }
+}
+
+// List type button styling
+.list-type-button {
+  padding: 8px 12px !important;
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  .list-type-icon {
+    font-family: monospace;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1f1f1f;
+  }
+
+  i.fa-chevron-down {
+    font-size: 0.7rem;
+  }
+}
+
+// List type preview in dropdown
+.list-type-preview {
+  display: inline-block;
+  font-family: monospace;
+  font-weight: 600;
+  min-width: 30px;
+  text-align: right;
+  margin-right: 8px;
+  color: #0050a4;
+}
+
+// List type grid menu
+.list-type-grid-menu {
+  min-width: auto;
+  width: auto;
+}
+
+// List type grid container
+.list-type-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  padding: 4px;
+  
+  &.bullet-list-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+// List type grid item
+.list-type-grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  border: 1px solid transparent;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  margin: 2px;
+  
+  &:hover {
+    background-color: #f0f0f0;
+    border-color: #d0d0d0;
+    
+    .list-type-preview-large {
+      color: #0050a4;
+      transform: scale(1.1);
+    }
+  }
+  
+  &.active {
+    background-color: #e3f2fd;
+    border-color: #0050a4;
+    
+    .list-type-preview-large {
+      color: #0050a4;
+      font-weight: 900;
+    }
+  }
+  
+  &:focus-visible {
+    outline: 2px solid #0050a4;
+    outline-offset: -2px;
+    z-index: 2;
+  }
+}
+
+// List type preview large (icon only)
+.list-type-preview-large {
+  display: inline-block;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #1f1f1f;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+// Remove icon
+.list-remove-icon {
+  font-size: 1rem;
+  color: #d32f2f;
+  margin-right: 8px;
+}
+
+// Ordered list types styling
+::ng-deep ol {
+  &[data-list-type="decimal"] {
+    list-style-type: decimal;
+  }
+
+  &[data-list-type="decimal-leading-zero"] {
+    list-style-type: decimal-leading-zero;
+  }
+
+  &[data-list-type="lower-alpha"] {
+    list-style-type: lower-alpha;
+  }
+
+  &[data-list-type="upper-alpha"] {
+    list-style-type: upper-alpha;
+  }
+
+  &[data-list-type="lower-roman"] {
+    list-style-type: lower-roman;
+  }
+
+  &[data-list-type="upper-roman"] {
+    list-style-type: upper-roman;
+  }
+}
+
+// Bullet list types styling
+::ng-deep ul {
+  &[data-list-type="disc"] {
+    list-style-type: disc;
+  }
+
+  &[data-list-type="circle"] {
+    list-style-type: circle;
+  }
+
+  &[data-list-type="square"] {
+    list-style-type: square;
+  }
+
+  &[data-list-type='"\\2714"'] {
+    list-style-type: "\2714";
+  }
+
+  &[data-list-type='"\\2705"'] {
+    list-style-type: "\2705";
+  }
+
+  &[data-list-type='"\\2610"'] {
+    list-style-type: "\2610";
+  }
+}
+

@@ -43,6 +43,8 @@
       "blockTypes": "Tipos de bloco",
       "bulletList": "Lista com marcadores",
       "orderedList": "Lista numerada",
+      "orderedListType": "Tipo de numeração",
+      "bulletListType": "Tipo de marcador",
       "indent": "Aumentar recuo",
       "outdent": "Diminuir recuo",
       "insert": "Inserir",
@@ -116,8 +118,26 @@
       "link": "Inserir link"
     },
     "lineHeight": {
-      "simple": "Simples",
-      "double": "Duplo"
+      "simple": "Altura simples",
+      "double": "Altura dupla"
+    },
+    "orderedListTypes": {
+      "decimal": "1, 2, 3 (decimal)",
+      "decimalLeadingZero": "01, 02, 03 (decimal com zero)",
+      "lowerAlpha": "a, b, c (minúsculas)",
+      "upperAlpha": "A, B, C (maiúsculas)",
+      "lowerRoman": "i, ii, iii (romanos minúsculos)",
+      "upperRoman": "I, II, III (romanos maiúsculos)",
+      "remove": "Remover ordenação"
+    },
+    "bulletListTypes": {
+      "disc": "Círculo cheio",
+      "circle": "Círculo vazio",
+      "square": "Quadrado",
+      "check": "Check",
+      "checkmark": "Check verde",
+      "checkbox": "Caixa de seleção",
+      "remove": "Remover marcadores"
     },
     "messages": {
       "noResults": "Nenhum resultado"

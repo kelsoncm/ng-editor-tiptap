@@ -43,6 +43,8 @@
       "blockTypes": "Tipos de bloque",
       "bulletList": "Lista con viñetas",
       "orderedList": "Lista numerada",
+      "orderedListType": "Tipo de numeración",
+      "bulletListType": "Tipo de viñeta",
       "indent": "Aumentar sangría",
       "outdent": "Disminuir sangría",
       "insert": "Insertar",
@@ -116,8 +118,26 @@
       "link": "Insertar enlace"
     },
     "lineHeight": {
-      "simple": "Simple",
-      "double": "Doble"
+      "simple": "Altura simple",
+      "double": "Doble altura"
+    },
+    "orderedListTypes": {
+      "decimal": "1, 2, 3 (decimal)",
+      "decimalLeadingZero": "01, 02, 03 (decimal con cero)",
+      "lowerAlpha": "a, b, c (minúsculas)",
+      "upperAlpha": "A, B, C (mayúsculas)",
+      "lowerRoman": "i, ii, iii (romanos minúsculas)",
+      "upperRoman": "I, II, III (romanos mayúsculas)",
+      "remove": "Quitar ordenación"
+    },
+    "bulletListTypes": {
+      "disc": "Círculo lleno",
+      "circle": "Círculo vacío",
+      "square": "Cuadrado",
+      "check": "Check",
+      "checkmark": "Check verde",
+      "checkbox": "Casilla",
+      "remove": "Quitar viñetas"
     },
     "messages": {
       "noResults": "Sin resultados"

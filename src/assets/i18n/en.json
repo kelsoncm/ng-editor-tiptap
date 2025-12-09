@@ -116,8 +116,26 @@
       "link": "Insert link"
     },
     "lineHeight": {
-      "simple": "Simple",
-      "double": "Double"
+      "simple": "Simple height",
+      "double": "Double height"
+    },
+    "orderedListTypes": {
+      "decimal": "1, 2, 3 (decimal)",
+      "decimalLeadingZero": "01, 02, 03 (decimal with zero)",
+      "lowerAlpha": "a, b, c (lowercase)",
+      "upperAlpha": "A, B, C (uppercase)",
+      "lowerRoman": "i, ii, iii (lower roman)",
+      "upperRoman": "I, II, III (upper roman)",
+      "remove": "Remove ordering"
+    },
+    "bulletListTypes": {
+      "disc": "Filled circle",
+      "circle": "Empty circle",
+      "square": "Square",
+      "check": "Check",
+      "checkmark": "Green checkmark",
+      "checkbox": "Checkbox",
+      "remove": "Remove bullets"
     },
     "messages": {
       "noResults": "No results"
