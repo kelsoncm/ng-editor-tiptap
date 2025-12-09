@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   forwardRef,
+  HostListener,
   Input,
   OnDestroy,
   Output,
@@ -537,6 +538,27 @@ export class EditorComponent
 
   // Toolbar actions
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    
+    // Verifica se o clique foi em um dropdown, na toolbar ou no balloon menu
+    const clickedInsideToolbar = target.closest('.toolbar');
+    const clickedInsideDropdown = target.closest('.dropdown-menu') || target.closest('.dropdown-trigger');
+    const clickedInsideBalloon = target.closest('.balloon-menu');
+    const clickedInsideEditor = this.editorElement?.nativeElement.contains(target);
+    
+    // Se clicou fora da toolbar, dropdowns e balloon menu, fecha tudo
+    if (!clickedInsideToolbar && !clickedInsideDropdown && !clickedInsideBalloon) {
+      this.closeAllToolbarDropdowns();
+    }
+    
+    // Se clicou no editor mas não no balloon, fecha o balloon
+    if (clickedInsideEditor && !clickedInsideBalloon) {
+      // Não fecha o balloon aqui, pois updateBalloonMenuPosition vai cuidar disso
+    }
+  }
+
   undo(): void {
     this.editor?.chain().focus().undo().run();
   }
@@ -562,7 +584,12 @@ export class EditorComponent
   }
 
   toggleBulletListTypeDropdown(): void {
-    this.showBulletListTypeDropdown = !this.showBulletListTypeDropdown;
+    const willOpen = !this.showBulletListTypeDropdown;
+    this.showBulletListTypeDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('bulletListType');
+      this.closeBalloonMenu();
+    }
   }
 
   closeBulletListTypeDropdown(): void {
@@ -611,7 +638,12 @@ export class EditorComponent
   }
 
   toggleOrderedListTypeDropdown(): void {
-    this.showOrderedListTypeDropdown = !this.showOrderedListTypeDropdown;
+    const willOpen = !this.showOrderedListTypeDropdown;
+    this.showOrderedListTypeDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('orderedListType');
+      this.closeBalloonMenu();
+    }
   }
 
   closeOrderedListTypeDropdown(): void {
@@ -715,7 +747,12 @@ export class EditorComponent
 
   // Text Formatting Dropdown
   toggleTextFormattingDropdown(): void {
-    this.showTextFormattingDropdown = !this.showTextFormattingDropdown;
+    const willOpen = !this.showTextFormattingDropdown;
+    this.showTextFormattingDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('textFormatting');
+      this.closeBalloonMenu();
+    }
   }
 
   closeTextFormattingDropdown(): void {
@@ -729,7 +766,12 @@ export class EditorComponent
   }
 
   toggleLineHeightDropdown(): void {
-    this.showLineHeightDropdown = !this.showLineHeightDropdown;
+    const willOpen = !this.showLineHeightDropdown;
+    this.showLineHeightDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('lineHeight');
+      this.closeBalloonMenu();
+    }
   }
 
   closeLineHeightDropdown(): void {
@@ -753,7 +795,12 @@ export class EditorComponent
 
   // Font Family methods
   toggleFontFamilyDropdown(): void {
-    this.showFontFamilyDropdown = !this.showFontFamilyDropdown;
+    const willOpen = !this.showFontFamilyDropdown;
+    this.showFontFamilyDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('fontFamily');
+      this.closeBalloonMenu();
+    }
   }
 
   closeFontFamilyDropdown(): void {
@@ -777,7 +824,12 @@ export class EditorComponent
 
   // Font Size methods
   toggleFontSizeDropdown(): void {
-    this.showFontSizeDropdown = !this.showFontSizeDropdown;
+    const willOpen = !this.showFontSizeDropdown;
+    this.showFontSizeDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('fontSize');
+      this.closeBalloonMenu();
+    }
   }
 
   closeFontSizeDropdown(): void {
@@ -796,7 +848,12 @@ export class EditorComponent
 
   // Text Color methods
   toggleTextColorDropdown(): void {
-    this.showTextColorDropdown = !this.showTextColorDropdown;
+    const willOpen = !this.showTextColorDropdown;
+    this.showTextColorDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('textColor');
+      this.closeBalloonMenu();
+    }
   }
 
   closeTextColorDropdown(): void {
@@ -821,7 +878,12 @@ export class EditorComponent
 
   // Highlight Color methods
   toggleHighlightColorDropdown(): void {
-    this.showHighlightColorDropdown = !this.showHighlightColorDropdown;
+    const willOpen = !this.showHighlightColorDropdown;
+    this.showHighlightColorDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('highlightColor');
+      this.closeBalloonMenu();
+    }
   }
 
   closeHighlightColorDropdown(): void {
@@ -850,7 +912,12 @@ export class EditorComponent
 
   // Text Align methods
   toggleTextAlignDropdown(): void {
-    this.showTextAlignDropdown = !this.showTextAlignDropdown;
+    const willOpen = !this.showTextAlignDropdown;
+    this.showTextAlignDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('textAlign');
+      this.closeBalloonMenu();
+    }
   }
 
   closeTextAlignDropdown(): void {
@@ -859,7 +926,12 @@ export class EditorComponent
 
   // Insert dropdown methods
   toggleInsertDropdown(): void {
-    this.showInsertDropdown = !this.showInsertDropdown;
+    const willOpen = !this.showInsertDropdown;
+    this.showInsertDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('insert');
+      this.closeBalloonMenu();
+    }
   }
 
   closeInsertDropdown(): void {
@@ -889,7 +961,12 @@ export class EditorComponent
 
   // Table methods
   toggleTableDropdown(): void {
-    this.showTableDropdown = !this.showTableDropdown;
+    const willOpen = !this.showTableDropdown;
+    this.showTableDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('table');
+      this.closeBalloonMenu();
+    }
   }
 
   closeTableDropdown(): void {
@@ -985,7 +1062,12 @@ export class EditorComponent
   }
 
   toggleTableCellAlignDropdown(): void {
-    this.showTableCellAlignDropdown = !this.showTableCellAlignDropdown;
+    const willOpen = !this.showTableCellAlignDropdown;
+    this.showTableCellAlignDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('tableCellAlign');
+      this.closeBalloonMenu();
+    }
   }
 
   closeTableCellAlignDropdown(): void {
@@ -999,7 +1081,12 @@ export class EditorComponent
   }
 
   toggleTableCellBackgroundDropdown(): void {
-    this.showTableCellBackgroundDropdown = !this.showTableCellBackgroundDropdown;
+    const willOpen = !this.showTableCellBackgroundDropdown;
+    this.showTableCellBackgroundDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('tableCellBackground');
+      this.closeBalloonMenu();
+    }
   }
 
   closeTableCellBackgroundDropdown(): void {
@@ -1117,7 +1204,12 @@ export class EditorComponent
   }
 
   toggleBlocksDropdown(): void {
-    this.showBlocksDropdown = !this.showBlocksDropdown;
+    const willOpen = !this.showBlocksDropdown;
+    this.showBlocksDropdown = willOpen;
+    if (willOpen) {
+      this.closeAllToolbarDropdownsExcept('blocks');
+      this.closeBalloonMenu();
+    }
   }
 
   closeBlocksDropdown(): void {
@@ -1232,12 +1324,50 @@ export class EditorComponent
         };
 
         this.showBalloonMenu = true;
+        // Fecha todos os dropdowns da toolbar quando o balloon menu é exibido
+        this.closeAllToolbarDropdowns();
       }
     }, 0);
   }
 
   closeBalloonMenu(): void {
     this.showBalloonMenu = false;
+  }
+
+  // Fecha todos os dropdowns da toolbar
+  private closeAllToolbarDropdowns(): void {
+    this.showBlocksDropdown = false;
+    this.showTextFormattingDropdown = false;
+    this.showLineHeightDropdown = false;
+    this.showFontFamilyDropdown = false;
+    this.showFontSizeDropdown = false;
+    this.showTextColorDropdown = false;
+    this.showHighlightColorDropdown = false;
+    this.showTextAlignDropdown = false;
+    this.showInsertDropdown = false;
+    this.showTableDropdown = false;
+    this.showTableCellAlignDropdown = false;
+    this.showTableCellBackgroundDropdown = false;
+    this.showOrderedListTypeDropdown = false;
+    this.showBulletListTypeDropdown = false;
+  }
+
+  // Fecha todos os dropdowns exceto o especificado
+  private closeAllToolbarDropdownsExcept(exception: string): void {
+    if (exception !== 'blocks') this.showBlocksDropdown = false;
+    if (exception !== 'textFormatting') this.showTextFormattingDropdown = false;
+    if (exception !== 'lineHeight') this.showLineHeightDropdown = false;
+    if (exception !== 'fontFamily') this.showFontFamilyDropdown = false;
+    if (exception !== 'fontSize') this.showFontSizeDropdown = false;
+    if (exception !== 'textColor') this.showTextColorDropdown = false;
+    if (exception !== 'highlightColor') this.showHighlightColorDropdown = false;
+    if (exception !== 'textAlign') this.showTextAlignDropdown = false;
+    if (exception !== 'insert') this.showInsertDropdown = false;
+    if (exception !== 'table') this.showTableDropdown = false;
+    if (exception !== 'tableCellAlign') this.showTableCellAlignDropdown = false;
+    if (exception !== 'tableCellBackground') this.showTableCellBackgroundDropdown = false;
+    if (exception !== 'orderedListType') this.showOrderedListTypeDropdown = false;
+    if (exception !== 'bulletListType') this.showBulletListTypeDropdown = false;
   }
 
   // ControlValueAccessor
