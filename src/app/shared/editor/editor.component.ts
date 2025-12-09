@@ -75,6 +75,7 @@ export class EditorComponent
   @Input() enableTextColor = true;
   @Input() enableHighlight = true;
   @Input() enableTable = true;
+  @Input() enableBalloonMenu = true;
   @Input() mentionItems: { id: string; label: string }[] = [
     { id: 'inicioEdital', label: 'inicioEdital' },
     { id: 'fimEdital', label: 'fimEdital' },
@@ -939,6 +940,12 @@ export class EditorComponent
   }
 
   private updateBalloonMenuPosition(): void {
+    // Verifica se o balloon menu está habilitado
+    if (!this.enableBalloonMenu) {
+      this.showBalloonMenu = false;
+      return;
+    }
+
     // Verifica se há seleção de texto
     const { from, to } = this.editor!.state.selection;
     const isEmpty = from === to;
