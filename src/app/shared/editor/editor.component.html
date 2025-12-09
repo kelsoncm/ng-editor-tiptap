@@ -474,3 +474,51 @@
   class="editor-surface"
   [style.min-height]="minHeight">
 </div>
+
+<!-- Footer bar with counters -->
+<div class="editor-footer" *ngIf="showFooter">
+  <div class="footer-counter">
+    <span class="counter-label">{{ 'editor.footer.characters' | translate }}:</span>
+    <span class="counter-value" 
+          [class.counter-below-minimum]="characterMinimum && characterCount < characterMinimum"
+          [class.counter-above-limit]="characterLimit && characterCount > characterLimit"
+          [class.counter-valid]="(characterMinimum || characterLimit) && (!characterMinimum || characterCount >= characterMinimum) && (!characterLimit || characterCount <= characterLimit)">
+      <ng-container *ngIf="characterMinimum && characterLimit">{{ characterCount }} ({{ characterMinimum }}-{{ characterLimit }})</ng-container>
+      <ng-container *ngIf="characterMinimum && !characterLimit">{{ characterCount }}/{{ characterMinimum }}+</ng-container>
+      <ng-container *ngIf="!characterMinimum && characterLimit">{{ characterCount }}/{{ characterLimit }}</ng-container>
+      <ng-container *ngIf="!characterMinimum && !characterLimit">{{ characterCount }}</ng-container>
+      <i class="fas fa-exclamation-circle indicator-icon" *ngIf="(characterMinimum && characterCount < characterMinimum) || (characterLimit && characterCount > characterLimit)"></i>
+      <i class="fas fa-check-circle indicator-icon" *ngIf="(characterMinimum || characterLimit) && (!characterMinimum || characterCount >= characterMinimum) && (!characterLimit || characterCount <= characterLimit)"></i>
+    </span>
+  </div>
+  
+  <div class="footer-counter">
+    <span class="counter-label">{{ 'editor.footer.words' | translate }}:</span>
+    <span class="counter-value" 
+          [class.counter-below-minimum]="wordMinimum && wordCount < wordMinimum"
+          [class.counter-above-limit]="wordLimit && wordCount > wordLimit"
+          [class.counter-valid]="(wordMinimum || wordLimit) && (!wordMinimum || wordCount >= wordMinimum) && (!wordLimit || wordCount <= wordLimit)">
+      <ng-container *ngIf="wordMinimum && wordLimit">{{ wordCount }} ({{ wordMinimum }}-{{ wordLimit }})</ng-container>
+      <ng-container *ngIf="wordMinimum && !wordLimit">{{ wordCount }}/{{ wordMinimum }}+</ng-container>
+      <ng-container *ngIf="!wordMinimum && wordLimit">{{ wordCount }}/{{ wordLimit }}</ng-container>
+      <ng-container *ngIf="!wordMinimum && !wordLimit">{{ wordCount }}</ng-container>
+      <i class="fas fa-exclamation-circle indicator-icon" *ngIf="(wordMinimum && wordCount < wordMinimum) || (wordLimit && wordCount > wordLimit)"></i>
+      <i class="fas fa-check-circle indicator-icon" *ngIf="(wordMinimum || wordLimit) && (!wordMinimum || wordCount >= wordMinimum) && (!wordLimit || wordCount <= wordLimit)"></i>
+    </span>
+  </div>
+  
+  <div class="footer-counter">
+    <span class="counter-label">{{ 'editor.footer.paragraphs' | translate }}:</span>
+    <span class="counter-value" 
+          [class.counter-below-minimum]="paragraphMinimum && paragraphCount < paragraphMinimum"
+          [class.counter-above-limit]="paragraphLimit && paragraphCount > paragraphLimit"
+          [class.counter-valid]="(paragraphMinimum || paragraphLimit) && (!paragraphMinimum || paragraphCount >= paragraphMinimum) && (!paragraphLimit || paragraphCount <= paragraphLimit)">
+      <ng-container *ngIf="paragraphMinimum && paragraphLimit">{{ paragraphCount }} ({{ paragraphMinimum }}-{{ paragraphLimit }})</ng-container>
+      <ng-container *ngIf="paragraphMinimum && !paragraphLimit">{{ paragraphCount }}/{{ paragraphMinimum }}+</ng-container>
+      <ng-container *ngIf="!paragraphMinimum && paragraphLimit">{{ paragraphCount }}/{{ paragraphLimit }}</ng-container>
+      <ng-container *ngIf="!paragraphMinimum && !paragraphLimit">{{ paragraphCount }}</ng-container>
+      <i class="fas fa-exclamation-circle indicator-icon" *ngIf="(paragraphMinimum && paragraphCount < paragraphMinimum) || (paragraphLimit && paragraphCount > paragraphLimit)"></i>
+      <i class="fas fa-check-circle indicator-icon" *ngIf="(paragraphMinimum || paragraphLimit) && (!paragraphMinimum || paragraphCount >= paragraphMinimum) && (!paragraphLimit || paragraphCount <= paragraphLimit)"></i>
+    </span>
+  </div>
+</div>

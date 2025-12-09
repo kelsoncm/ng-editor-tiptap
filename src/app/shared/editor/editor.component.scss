@@ -6,12 +6,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0;
-  margin-bottom: 12px;
+  margin-bottom: 0;
   align-items: center;
   padding: 8px;
   background-color: #f8f8f8;
-  border-radius: 4px;
+  border-radius: 4px 4px 0 0;
   border: 1px solid #e0e0e0;
+  border-bottom: none;
 
   button {
     border: 1px solid #d0d0d0;
@@ -231,7 +232,7 @@
 .editor-surface {
   border: 1px solid #ccc;
   padding: 8px;
-  border-radius: 4px;
+  border-radius: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   &:focus,
@@ -808,5 +809,68 @@
     margin: 4px 0;
     background-color: #e0e0e0;
     border: none;
+  }
+}
+
+// Editor footer with counters
+.editor-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 12px;
+  margin-top: 0;
+  background-color: #f8f8f8;
+  border-radius: 0 0 4px 4px;
+  border: 1px solid #e0e0e0;
+  border-top: none;
+  font-size: 0.875rem;
+
+  .footer-counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .counter-label {
+      color: #666;
+      font-weight: 500;
+    }
+
+    .counter-value {
+      color: #1f1f1f;
+      font-weight: 600;
+      font-family: 'Courier New', monospace;
+      min-width: 40px;
+      text-align: right;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      &.counter-below-minimum {
+        color: #ed6c02;
+        font-weight: 700;
+      }
+
+      &.counter-above-limit {
+        color: #d32f2f;
+        font-weight: 700;
+      }
+
+      &.counter-valid {
+        color: #2e7d32;
+        font-weight: 700;
+      }
+
+      .indicator-icon {
+        font-size: 0.75rem;
+        margin-left: 2px;
+      }
+
+      // Deprecated class kept for backwards compatibility
+      &.counter-limit {
+        color: #d32f2f;
+        font-weight: 700;
+      }
+    }
   }
 }

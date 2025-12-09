@@ -50,8 +50,15 @@
           [enableItalic]="true"
           [enableBalloonMenu]="true"
           [enableCode]="true"
+          [characterMinimum]="50"
+          [characterLimit]="1000"
+          [wordMinimum]="10"
+          [wordLimit]="200"
+          [paragraphMinimum]="2"
+          [paragraphLimit]="10"
           (jsonChange)="onJsonChange($event)"
           (focus)="onFocus()"
+          [showFooter]="true"
           (blur)="onBlur()">
         </app-editor>
 

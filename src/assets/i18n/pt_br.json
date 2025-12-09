@@ -124,6 +124,11 @@
     },
     "placeholders": {
       "default": "Digite aqui…"
+    },
+    "footer": {
+      "characters": "Caracteres",
+      "words": "Palavras",
+      "paragraphs": "Parágrafos"
     }
   },
   "validation": {

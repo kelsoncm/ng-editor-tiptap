@@ -86,6 +86,15 @@ export class EditorComponent
     { id: 'descricaoEdital', label: 'descricaoEdital' },
   ];
 
+  // Footer settings
+  @Input() showFooter = true;
+  @Input() characterLimit?: number;
+  @Input() characterMinimum?: number;
+  @Input() wordLimit?: number;
+  @Input() wordMinimum?: number;
+  @Input() paragraphLimit?: number;
+  @Input() paragraphMinimum?: number;
+
   @Output() jsonChange = new EventEmitter<JSONContent>();
   @Output() focus = new EventEmitter<void>();
   @Output() blur = new EventEmitter<void>();
@@ -115,6 +124,11 @@ export class EditorComponent
   currentTextAlign: string = 'left';
   currentTableCellBackground: string = '#ffffff';
   captionPosition: 'top' | 'bottom' = 'top';
+
+  // Counters for footer
+  characterCount = 0;
+  wordCount = 0;
+  paragraphCount = 0;
 
   fontFamilies = [
     { value: 'Default', label: 'Default' },
@@ -433,6 +447,7 @@ export class EditorComponent
         this.onChange(html);
         this.jsonChange.emit(json);
         this.updateCurrentBlockType();
+        this.updateCounts();
       },
       onSelectionUpdate: ({ editor }) => {
         this.updateCurrentBlockType();
@@ -455,6 +470,11 @@ export class EditorComponent
         this.showInsertDropdown = false;
       }
     });
+
+    // Initialize counts
+    setTimeout(() => {
+      this.updateCounts();
+    }, 0);
   }
 
   ngOnDestroy(): void {
@@ -1135,5 +1155,32 @@ export class EditorComponent
       result = res;
     });
     return result || key;
+  }
+
+  /**
+   * Updates character, word, and paragraph counts
+   */
+  private updateCounts(): void {
+    if (!this.editor) return;
+
+    const text = this.editor.getText();
+    
+    // Character count (excluding whitespace)
+    this.characterCount = text.replace(/\s/g, '').length;
+    
+    // Word count
+    const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+    this.wordCount = words.length;
+    
+    // Paragraph count
+    const doc = this.editor.state.doc;
+    let paragraphCount = 0;
+    doc.descendants((node) => {
+      if (node.type.name === 'paragraph' && node.textContent.trim().length > 0) {
+        paragraphCount++;
+      }
+      return true;
+    });
+    this.paragraphCount = paragraphCount;
   }
 }
