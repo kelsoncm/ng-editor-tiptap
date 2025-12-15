@@ -140,9 +140,6 @@
     </div>
 
     <div class="toolbar-group">
-      <!-- inline marks -->
-      <button type="button" (click)="toggleBold()" [title]="'editor.toolbar.bold' | translate"><i class="fas fa-bold"></i></button>
-      <button type="button" (click)="toggleItalic()" [title]="'editor.toolbar.italic' | translate"><i class="fas fa-italic"></i></button>
       
       <!-- text formatting dropdown -->
       <div class="toolbar-dropdown">
@@ -152,7 +149,14 @@
         <div class="dropdown-menu" *ngIf="showTextFormattingDropdown" (click)="$event.stopPropagation()">
           <!-- Inline formatting buttons in a single row -->
           <div class="dropdown-button-group">
-            <button type="button" (click)="toggleUnderline()" class="dropdown-button" [title]="'editor.toolbar.underline' | translate">
+            <!-- inline marks -->
+            <button type="button" (click)="toggleBold()" [title]="'editor.toolbar.bold' | translate">
+              <i class="fas fa-bold"></i>
+            </button>
+            <button type="button" (click)="toggleItalic()" [title]="'editor.toolbar.italic' | translate">
+              <i class="fas fa-italic"></i>
+            </button>
+            <button type="button" (click)="toggleUnderline()" [title]="'editor.toolbar.underline' | translate">
               <i class="fas fa-underline"></i>
             </button>
             <button type="button" (click)="toggleStrike()" class="dropdown-button" [title]="'editor.toolbar.strike' | translate">
@@ -285,16 +289,6 @@
     </div>
 
     <div class="toolbar-group">
-      <!-- Table of Contents toggle button -->
-      <button 
-        type="button" 
-        (click)="toggleTableOfContents()" 
-        class="toolbar-btn"
-        [class.active]="showTableOfContents"
-        [title]="'editor.toolbar.tableOfContents' | translate"
-        *ngIf="enableTableOfContents">
-        <i class="fas fa-list-ol"></i>
-      </button>
 
       <!-- Insert dropdown -->
       <div class="toolbar-dropdown">
@@ -319,6 +313,22 @@
           </button>
         </div>
       </div>
+      
+    </div>
+
+    <div class="toolbar-spacer"></div>
+
+    <!-- Table of Contents toggle button -->
+    <div class="toolbar-group">
+      <button 
+      type="button" 
+      (click)="toggleTableOfContents()" 
+      class="toolbar-btn"
+      [class.active]="showTableOfContents"
+      [title]="'editor.toolbar.tableOfContents' | translate"
+      *ngIf="enableTableOfContents">
+        <i class="fas fa-stream"></i>
+      </button>
     </div>
 
   </ng-container>
@@ -339,6 +349,31 @@
         (click)="insertMention(item)">
         {{ item.label }}
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- Link Edit Dialog -->
+<div class="link-dialog-overlay" *ngIf="showLinkDialog" (click)="closeLinkDialog()">
+  <div class="link-dialog" (click)="$event.stopPropagation()">
+    <div class="link-dialog-header">
+      <h3>{{ 'editor.toolbar.link' | translate }}</h3>
+      <button class="close-btn" (click)="closeLinkDialog()">×</button>
+    </div>
+    <div class="link-dialog-content">
+      <label>{{ 'editor.dialogs.linkPrompt' | translate }}</label>
+      <input type="text" [value]="linkDialogHref" (input)="linkDialogHref = $any($event.target).value" class="link-input" />
+      <div class="link-options">
+        <label>
+          <input type="checkbox" [checked]="linkDialogTargetBlank" (change)="linkDialogTargetBlank = $any($event.target).checked" />
+          Abrir em nova aba
+        </label>
+      </div>
+      <div class="link-actions">
+        <button type="button" (click)="applyLinkDialog()">Alterar URL</button>
+        <button type="button" (click)="removeLinkFromDialog()">Remover link</button>
+        <button type="button" (click)="closeLinkDialog()">Cancelar</button>
+      </div>
     </div>
   </div>
 </div>
@@ -411,6 +446,14 @@
       (click)="setLink(); closeBalloonMenu()"
       [title]="'editor.balloonMenu.link' | translate">
       <i class="fas fa-link"></i>
+    </button>
+    <button
+      *ngIf="showLinkInSelection"
+      type="button"
+      class="balloon-button"
+      (click)="openLinkDialogFromSelection(); closeBalloonMenu()"
+      title="Editar link">
+      <i class="fas fa-edit"></i>
     </button>
   </ng-container>
 

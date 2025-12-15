@@ -34,12 +34,14 @@ import tippy, { Instance as TippyInstance } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { I18nService } from '../services/i18n.service';
+import { NgZone } from '@angular/core';
 import { LineHeight } from './extensions/line-height';
 import { FontSize } from './extensions/font-size';
 import { TableCaption } from './extensions/table-caption';
 import { Indent } from './extensions/indent';
 import { CustomOrderedList, OrderedListType } from './extensions/ordered-list';
 import { CustomBulletList, BulletListType } from './extensions/bullet-list';
+// import { CustomListItem } from './extensions/list-item';
 import { PageBreak } from './extensions/page-break';
 import TableOfContents from '@tiptap/extension-table-of-contents';
 
@@ -124,6 +126,11 @@ export class EditorComponent
   showBalloonMenu = false;
   balloonMenuPosition = { top: '0px', left: '0px' };
   isInTable = false;
+  showLinkDialog = false;
+  linkDialogHref = '';
+  linkDialogTargetBlank = false;
+  showLinkInSelection = false;
+  
   showTableOfContents = false;
   tableOfContentsData: any[] = [];
   currentBlockType: string = 'fas fa-paragraph';
@@ -226,7 +233,8 @@ export class EditorComponent
 
   constructor(
     private i18nService: I18nService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private ngZone: NgZone
   ) {}
 
   ngAfterViewInit(): void {
@@ -241,7 +249,9 @@ export class EditorComponent
         code: this.enableCode ? {} : false,
         orderedList: false, // Disable default OrderedList
         bulletList: false, // Disable default BulletList
+        // keep default paragraph handling; we'll post-process HTML to remove <p> inside <li>
       }),
+      // keep default listItem behavior
       CustomOrderedList, // Use custom OrderedList
       CustomBulletList, // Use custom BulletList
     ];
@@ -470,16 +480,24 @@ export class EditorComponent
           },
           mousedown: (view, event) => {
             const target = event.target as HTMLElement;
-            if (target.closest('a')) {
+            const anchor = target.closest('a') as HTMLAnchorElement | null;
+            if (anchor) {
               event.preventDefault();
+              console.log('[Editor] anchor mousedown detected:', anchor.href);
+              // Open link edit dialog
+              (this as any).openLinkDialogFromElement(anchor);
               return true;
             }
             return false;
           },
           click: (view, event) => {
             const target = event.target as HTMLElement;
-            if (target.closest('a')) {
+            const anchor = target.closest('a') as HTMLAnchorElement | null;
+            if (anchor) {
               event.preventDefault();
+              console.log('[Editor] anchor click detected:', anchor.href);
+              // Open link edit dialog
+              (this as any).openLinkDialogFromElement(anchor);
               return true;
             }
             return false;
@@ -487,7 +505,8 @@ export class EditorComponent
         },
       },
       onUpdate: ({ editor }) => {
-        const html = editor.getHTML();
+        let html = editor.getHTML();
+        html = this.cleanListParagraphs(html);
         const json = editor.getJSON();
         this.innerValue = html;
         this.onChange(html);
@@ -503,6 +522,23 @@ export class EditorComponent
         this.updateBalloonMenuPosition();
       },
     });
+
+    console.log('[Editor] initialized', this.editor);
+
+    // Fallback native click listener on the editor element to detect anchors
+    if (this.editorElement && this.editorElement.nativeElement) {
+      this.editorElement.nativeElement.addEventListener('click', (event: MouseEvent) => {
+        const target = event.target as HTMLElement;
+        const anchor = target.closest('a') as HTMLAnchorElement | null;
+        if (anchor) {
+          console.log('[Editor][native] anchor clicked:', anchor.href);
+          this.ngZone.run(() => {
+            this.openLinkDialogFromElement(anchor);
+          });
+          event.preventDefault();
+        }
+      });
+    }
 
     // Fechar dropdowns ao clicar fora
     document.addEventListener('click', (event: MouseEvent) => {
@@ -1202,6 +1238,53 @@ export class EditorComponent
     this.editor?.chain().focus().unsetLink().run();
   }
 
+  openLinkDialogFromElement(anchor: HTMLAnchorElement): void {
+    const href = anchor.getAttribute('href') || '';
+    const target = anchor.getAttribute('target') || '';
+    // Run inside Angular zone so change detection updates the template
+    this.ngZone.run(() => {
+      console.log('[Editor] openLinkDialogFromElement', href, target);
+      this.linkDialogHref = href;
+      this.linkDialogTargetBlank = target === '_blank';
+      this.showLinkDialog = true;
+    });
+  }
+
+  applyLinkDialog(): void {
+    if (this.showLinkDialog === false) return;
+
+    console.log('[Editor] applyLinkDialog', this.linkDialogHref, this.linkDialogTargetBlank);
+
+    if (!this.linkDialogHref || this.linkDialogHref.trim() === '') {
+      this.editor?.chain().focus().unsetLink().run();
+      this.showLinkDialog = false;
+      return;
+    }
+
+    const attrs: any = { href: this.linkDialogHref };
+    if (this.linkDialogTargetBlank) attrs.target = '_blank';
+    else attrs.target = null;
+
+    this.editor
+      ?.chain()
+      .focus()
+      .extendMarkRange('link')
+      .setLink(attrs)
+      .run();
+
+    this.showLinkDialog = false;
+  }
+
+  removeLinkFromDialog(): void {
+    console.log('[Editor] removeLinkFromDialog');
+    this.editor?.chain().focus().unsetLink().run();
+    this.showLinkDialog = false;
+  }
+
+  closeLinkDialog(): void {
+    this.showLinkDialog = false;
+  }
+
   setPageBreak(): void {
     this.editor?.chain().focus().setPageBreak().run();
   }
@@ -1325,6 +1408,12 @@ export class EditorComponent
   }
 
   private updateBalloonMenuPosition(): void {
+    // Update whether selection has a link
+    const isLinkActive = this.editor?.isActive('link') || false;
+    this.ngZone.run(() => {
+      this.showLinkInSelection = !!isLinkActive;
+    });
+
     // Verifica se há seleção de texto ou se está dentro de uma tabela
     const { from, to } = this.editor!.state.selection;
     const isEmpty = from === to;
@@ -1380,6 +1469,17 @@ export class EditorComponent
     }, 0);
   }
 
+  openLinkDialogFromSelection(): void {
+    const attrs = this.editor?.getAttributes('link') || {};
+    const href = attrs['href'] || '';
+    const target = attrs['target'] || '';
+    this.ngZone.run(() => {
+      this.linkDialogHref = href;
+      this.linkDialogTargetBlank = target === '_blank';
+      this.showLinkDialog = true;
+    });
+  }
+
   closeBalloonMenu(): void {
     this.showBalloonMenu = false;
   }
@@ -1424,6 +1524,8 @@ export class EditorComponent
 
   writeValue(value: string | null): void {
     this.innerValue = value ?? '';
+    // Clean any <p> inside <li> for incoming values
+    this.innerValue = this.cleanListParagraphs(this.innerValue);
     if (this.editor) {
       this.editor.commands.setContent(this.innerValue || '');
     }
@@ -1483,5 +1585,24 @@ export class EditorComponent
       return true;
     });
     this.paragraphCount = paragraphCount;
+  }
+
+  /**
+   * Remove unnecessary <p> tags that appear directly inside <li> elements in HTML output.
+   */
+  private cleanListParagraphs(html: string): string {
+    if (!html) return html;
+    // Replace <li><p>...</p></li> with <li>...</li>, handling multiple <p> tags
+    let prev: string;
+    let curr = html;
+    // Pattern matches: <li...> followed by optional whitespace, <p...>, content, </p>, optional whitespace, </li>
+    const re = /(<li\b[^>]*>)\s*<p\b[^>]*>([\s\S]*?)<\/p>\s*(<\/li>)/gi;
+    let iterations = 0;
+    do {
+      prev = curr;
+      curr = curr.replace(re, (_m, start, inner, end) => `${start}${inner}${end}`);
+      iterations++;
+    } while (curr !== prev && iterations < 10);
+    return curr;
   }
 }
